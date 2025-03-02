@@ -9,10 +9,16 @@ export class UserGateway implements UserGatewayInterface {
   constructor(private readonly prisma: PrismaService) {}
 
   async createUser(UserData: CreateUserDto): Promise<User> {
-    const newUser = await this.prisma.user.create({
+    return this.prisma.user.create({
       data: UserData,
     });
+  }
 
-    return newUser;
+  async findOneByUsername(username: string): Promise<User | null> {
+    return this.prisma.user.findFirst({
+      where: {
+        username,
+      },
+    });
   }
 }
