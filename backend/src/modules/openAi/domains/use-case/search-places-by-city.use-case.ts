@@ -3,7 +3,7 @@ import { openAi } from 'src/core/openAi/openAi';
 
 @Injectable()
 export class SearchPlacesByCityUseCase {
-  async execute(city: string) {
+  async execute(city: string, country: string) {
     try {
       const res = await openAi.chat.completions.create({
         model: 'gpt-4o-mini',
@@ -24,7 +24,7 @@ export class SearchPlacesByCityUseCase {
           },
           {
             role: 'user',
-            content: `Me forneça 5 lugares turísticos de ${city} com nome, descrição, latitude, longitude e uma imagem.`,
+            content: `Me forneça 5 lugares turísticos de ${city} em ${country} com nome, descrição, latitude, longitude.`,
           },
         ],
         response_format: { type: 'json_object' },

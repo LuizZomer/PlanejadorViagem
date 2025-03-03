@@ -9,7 +9,7 @@ generator client {
 
 model User {
   id         Int    @id @default(autoincrement())
-  externalId String @default(uuid()) @map("external_id")
+  externalId String @unique @default(uuid()) @map("external_id")
   username   String @unique
   email      String @unique
   password   String
@@ -21,7 +21,7 @@ model User {
 
 model City {
   id          Int    @id @default(autoincrement())
-  externalId  String @default(uuid()) @map("external_id")
+  externalId  String @unique @default(uuid()) @map("external_id")
   name        String
   country     String
   description String
@@ -35,7 +35,7 @@ model City {
 
 model Place {
   id          Int     @id @default(autoincrement())
-  externalId  String  @default(uuid()) @map("external_id")
+  externalId  String  @unique @default(uuid()) @map("external_id")
   name        String
   description String
   latitude    Decimal

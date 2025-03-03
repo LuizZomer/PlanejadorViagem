@@ -1,0 +1,74 @@
+import { Injectable } from '@nestjs/common';
+import { City, Place } from '@prisma/client';
+import { PrismaService } from 'src/core/prisma/prisma.service';
+import { CreateCityDto } from '../presentation/dto/create-city.dto';
+import { CityGatewayInterface } from './city-gateway.interface';
+import { CreatePlaceDto } from 'src/modules/place/presentation/dto/create-place.dto';
+
+@Injectable()
+export class CityGateway implements CityGatewayInterface {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async findAllCities(): Promise<City[]> {
+    return this.prisma.city.findMany();
+  }
+
+  async findCityAndPlaceByExternalId(externalId: string): Promise<City | null> {
+    return this.prisma.city.findUnique({
+      where: {
+        externalId,
+      },
+      include: {
+        Place: {
+          select: {
+            externalId: true,
+            description: true,
+            latitude: true,
+            longitude: true,
+            name: true,
+          },
+        },
+      },
+    });
+  }
+
+  async createCity(cityData: CreateCityDto): Promise<City> {
+    const { country, description, name, places, userId } = cityData;
+
+    const placesArray: CreatePlaceDto[] = places.map(
+      ({ name, description, latitude, longitude }) => ({
+        name,
+        latitude,
+        longitude,
+        description,
+      }),
+    );
+
+    const city: Omit<CreateCityDto, 'places'> = {
+      country,
+      description,
+      name,
+      userId,
+    };
+
+    return this.prisma.city.create({
+      data: {
+        ...city,
+        Place: {
+          create: placesArray,
+        },
+      },
+      include: {
+        Place: {
+          select: {
+            description: true,
+            externalId: true,
+            latitude: true,
+            longitude: true,
+            name: true,
+          },
+        },
+      },
+    });
+  }
+}

@@ -7,7 +7,7 @@ export class OpenAiService {
     private readonly searchPlaceByCityUseCase: SearchPlacesByCityUseCase,
   ) {}
 
-  async searchPlacesByCity(city: string) {
-    return this.searchPlaceByCityUseCase.execute(city);
+  async searchPlacesByCity(city: string, country: string) {
+    return this.searchPlaceByCityUseCase.execute(city, country);
   }
 }
