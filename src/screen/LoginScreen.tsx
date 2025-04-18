@@ -1,19 +1,38 @@
-import { ImageBackground, StyleSheet, Text, TextInput, View, KeyboardAvoidingView, Platform } from 'react-native';
+import { 
+  ImageBackground, 
+  StyleSheet, 
+  Text, 
+  TextInput, 
+  View, 
+  KeyboardAvoidingView, 
+  Platform, 
+  TouchableOpacity 
+} from 'react-native';
 import React, { useState } from 'react';
 import { Image } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { LinearGradient } from 'expo-linear-gradient';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
-import { TouchableOpacity } from 'react-native';
 
-const LoginScreen = () => {
-  const navigation = useNavigation();
-  const [userName, setUserName] = useState('');
-  const [password, setPassword] = useState('');
+const LoginScreen: React.FC = () => {
+  const navigation = useNavigation<any>();
+  const [userName, setUserName] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
   const handleRegister = () => {
     navigation.navigate('SignupScreen');
+  };
+
+  const handleLogin = () => {
+    if (!userName.trim() || !password.trim()) {
+      setError('Preencha todos os campos.');
+    } else {
+      setError('');
+      // Aqui pode ir a lógica de login/autenticação
+      console.log('Login realizado');
+    }
   };
 
   return (
@@ -35,8 +54,7 @@ const LoginScreen = () => {
         <TextInput
           style={styles.TextInput}
           value={userName}
-          onFocus={() => setUserName('')}
-          onChangeText={(text) => setUserName(text)}
+          onChangeText={setUserName}
           placeholder="Nome de usuário"
           placeholderTextColor="#9A9A9A"
         />
@@ -46,24 +64,25 @@ const LoginScreen = () => {
         <TextInput
           style={styles.TextInput}
           value={password}
-          onFocus={() => setPassword('')}
-          onChangeText={(text) => setPassword(text)}
+          onChangeText={setPassword}
           placeholder="Senha"
           placeholderTextColor="#9A9A9A"
           secureTextEntry
         />
       </View>
+
+      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
       <Text style={styles.forgotPassword}>Esqueceu sua senha?</Text>
-      <View style={styles.signInButtonContainer}>
+      <TouchableOpacity style={styles.signInButtonContainer} onPress={handleLogin}>
         <LinearGradient colors={['#FAF0E6', '#00BFFF']} style={styles.linearGradient}>
           <View style={styles.buttonContent}>
             <Text style={styles.signInText}>Entrar</Text>
             <AntDesign name={"arrowright"} size={30} color={"white"} style={{ marginLeft: -20 }} />
           </View>
         </LinearGradient>
-      </View>
+      </TouchableOpacity>
 
-      {/* TOQUE AQUI → para ir para tela de cadastro */}
       <TouchableOpacity onPress={handleRegister}>
         <Text style={styles.footerText}>
           Não possui uma conta? <Text style={{ textDecorationLine: 'underline', color: '#00BFFF' }}>Cadastrar-se</Text>
@@ -121,7 +140,8 @@ const styles = StyleSheet.create({
   TextInput: {
     marginLeft: 10,
     color: "#9A9A9A",
-    fontSize: 16
+    fontSize: 16,
+    flex: 1
   },
   forgotPassword: {
     textAlign: 'right',
@@ -179,5 +199,11 @@ const styles = StyleSheet.create({
   leftVectorImage: {
     width: 150,
     height: 250,
+  },
+  errorText: {
+    textAlign: 'center',
+    color: 'red',
+    fontSize: 14,
+    marginTop: 5,
   }
 });
