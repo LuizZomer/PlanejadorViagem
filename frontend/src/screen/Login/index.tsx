@@ -64,6 +64,7 @@ export const Login = () => {
   };
 
   const handleLogin = async(data: TLogin) => {
+    
     const res = await login(data);
     console.log(res);
   };
