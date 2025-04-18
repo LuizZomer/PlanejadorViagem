@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import SignupScreen from "./src/screen/SignupScreen";
+import { SignupScreen } from "./src/screen/SingUp/SignupScreen";
 import { Login } from "./src/screen/Login";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { ThemeProvider } from "@rneui/themed";
