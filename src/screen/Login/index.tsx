@@ -35,13 +35,14 @@ import {
 } from "./styles";
 import axios from "axios";
 import { Alert } from "react-native";
+import { login } from "../../services/auth/login";
 
 const loginSchema = z.object({
   username: z.string().min(3, "Nome de usuário é obrigatório"),
   password: z.string().min(6, "Senha é obrigatória"),
 });
 
-type TLogin = z.infer<typeof loginSchema>;
+export type TLogin = z.infer<typeof loginSchema>;
 
 export const Login = () => {
   const navigation = useNavigation<any>();
@@ -62,8 +63,9 @@ export const Login = () => {
     navigation.navigate("Register");
   };
 
-  const handleLogin = (data: TLogin) => {
-    console.log(data);
+  const handleLogin = async(data: TLogin) => {
+    const res = await login(data);
+    console.log(res);
   };
 
   return (

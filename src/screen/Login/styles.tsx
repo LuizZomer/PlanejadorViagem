@@ -31,12 +31,12 @@ export const SignInText = styled.Text`
   margin: 10px 50px;
 `;
 
-export const ForgotPassword = styled.Text`
-  text-align: right;
-  font-size: 15px;
-  color: #bebebe;
-  margin: 10px 60px 10px 65px;
-`;
+/*   export const ForgotPassword = styled.Text`
+    text-align: right;
+    font-size: 15px;
+    color: #bebebe;
+    margin: 10px 60px 10px 65px;
+  `; */
 
 export const FooterText = styled.Text`
   text-align: center;
