@@ -20,3 +20,4 @@ export const TextError = styled.Text`
   color: red;
   font-size: 14px;
 `;
+
