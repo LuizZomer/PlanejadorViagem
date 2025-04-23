@@ -9,7 +9,7 @@ import {
   ImageBackground,
 } from "react-native";
 import React from "react";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -36,6 +36,9 @@ import {
 import axios from "axios";
 import { Alert } from "react-native";
 import { login } from "../../services/auth/login";
+import { useStore } from "zustand";
+import { authStore } from "../../shared/stores/auth/authStore";
+import { TRootStackParamList } from "../../../App";
 
 const loginSchema = z.object({
   username: z.string().min(3, "Nome de usuário é obrigatório"),
@@ -45,7 +48,8 @@ const loginSchema = z.object({
 export type TLogin = z.infer<typeof loginSchema>;
 
 export const Login = () => {
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<NavigationProp<TRootStackParamList>>();
+  const storeLogin = authStore((store) => store.login)
 
   const {
     control,
@@ -65,8 +69,10 @@ export const Login = () => {
 
   const handleLogin = async(data: TLogin) => {
     
-    const res = await login(data);
-    console.log(res);
+    await login(data).then((token) => {      
+      storeLogin(token)
+      navigation.navigate("Home");
+    })
   };
 
   return (
@@ -76,7 +82,7 @@ export const Login = () => {
     >
       <Container>
         <TopImageContainer>
-          <TopImage source={require("../../assets/topVector.png")} />
+          <TopImage source={require("../../shared/assets/topVector.png")} />
         </TopImageContainer>
 
         <AppNameContainer>
@@ -171,7 +177,7 @@ export const Login = () => {
 
 
         <LeftVectorContainer>
-          <LeftVectorImage source={require("../../assets/leftVector.png")} />
+          <LeftVectorImage source={require("../../shared/assets/leftVector.png")} />
         </LeftVectorContainer>
       </Container>
     </KeyboardAvoidingView>
