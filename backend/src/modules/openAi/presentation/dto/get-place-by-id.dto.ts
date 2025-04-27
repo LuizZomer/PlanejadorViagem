@@ -6,4 +6,7 @@ export class GetPlaceByCity {
 
   @IsString({ message: 'Campo pais é obrigatório' })
   country: string;
+
+  @IsString({ message: 'Campo nivel de orçamento é obrigatório' })
+  spendingLevel: string;
 }

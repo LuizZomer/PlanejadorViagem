@@ -3,7 +3,7 @@ import { openAi } from 'src/core/openAi/openAi';
 
 @Injectable()
 export class SearchPlacesByCityUseCase {
-  async execute(city: string, country: string) {
+  async execute(city: string, country: string, spendingLevel: string) {
     try {
       const res = await openAi.chat.completions.create({
         model: 'gpt-4o-mini',
@@ -24,7 +24,7 @@ export class SearchPlacesByCityUseCase {
           },
           {
             role: 'user',
-            content: `Me forneça 5 lugares turísticos de ${city} em ${country} com nome, descrição, latitude, longitude.`,
+            content: `Me forneça 5 lugares turísticos de ${city} em ${country}, incluindo nome, descrição, latitude e longitude. Considere que o orçamento da viagem é '${spendingLevel}' (pouco, médio ou alto). Escolha lugares compatíveis com esse nível de gasto.`,
           },
         ],
         response_format: { type: 'json_object' },

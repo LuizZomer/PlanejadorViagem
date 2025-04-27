@@ -17,10 +17,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { Button, Input } from "@rneui/themed";
-import {
-  FormContainer,
-  MainContainer,
-} from "../../styles/GlobalStyles";
+import { FormContainer, MainContainer } from "../../styles/GlobalStyles";
 import {
   Container,
   TopImageContainer,
@@ -28,7 +25,7 @@ import {
   AppName,
   AppNameContainer,
   SignInText,
-/*   ForgotPassword, */
+  /*   ForgotPassword, */
   FooterText,
   LeftVectorContainer,
   LeftVectorImage,
@@ -38,7 +35,7 @@ import { Alert } from "react-native";
 import { login } from "../../services/auth/login";
 import { useStore } from "zustand";
 import { authStore } from "../../shared/stores/auth/authStore";
-import { TRootStackParamList } from "../../../App";
+import { TRootStackParamList } from "../../routes/AppStack";
 
 const loginSchema = z.object({
   username: z.string().min(3, "Nome de usuário é obrigatório"),
@@ -49,12 +46,12 @@ export type TLogin = z.infer<typeof loginSchema>;
 
 export const Login = () => {
   const navigation = useNavigation<NavigationProp<TRootStackParamList>>();
-  const storeLogin = authStore((store) => store.login)
+  const storeLogin = authStore((store) => store.login);
 
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<TLogin>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -67,12 +64,11 @@ export const Login = () => {
     navigation.navigate("Register");
   };
 
-  const handleLogin = async(data: TLogin) => {
-    
-    await login(data).then((token) => {      
-      storeLogin(token)
+  const handleLogin = async (data: TLogin) => {
+    return login(data).then((token) => {
+      storeLogin(token);
       navigation.navigate("Home");
-    })
+    });
   };
 
   return (
@@ -100,7 +96,9 @@ export const Login = () => {
             render={({ field }) => (
               <View style={{ paddingHorizontal: 65 }}>
                 <Input
-                  leftIcon={<FontAwesome name="user" size={24} color="#9A9A9A" />}
+                  leftIcon={
+                    <FontAwesome name="user" size={24} color="#9A9A9A" />
+                  }
                   value={field.value}
                   label="Nome de usuário"
                   onChangeText={field.onChange}
@@ -120,7 +118,9 @@ export const Login = () => {
             render={({ field }) => (
               <View style={{ paddingHorizontal: 65 }}>
                 <Input
-                  leftIcon={<FontAwesome name="lock" size={24} color="#9A9A9A" />}
+                  leftIcon={
+                    <FontAwesome name="lock" size={24} color="#9A9A9A" />
+                  }
                   value={field.value}
                   label="Senha"
                   onChangeText={field.onChange}
@@ -135,13 +135,13 @@ export const Login = () => {
           />
         </FormContainer>
 
-       {/*  <ForgotPassword>Esqueceu sua senha?</ForgotPassword> */}
+        {/*  <ForgotPassword>Esqueceu sua senha?</ForgotPassword> */}
 
         <MainContainer>
           <Button
             ViewComponent={LinearGradient}
             linearGradientProps={{
-              colors: ['#FAF0E6', '#00BFFF'],
+              colors: ["#FAF0E6", "#00BFFF"],
               start: { x: 0, y: 0 },
               end: { x: 1, y: 1 },
             }}
@@ -155,11 +155,11 @@ export const Login = () => {
               paddingVertical: 12,
             }}
             titleStyle={{
-              color: 'white',
-              fontWeight: 'bold',
+              color: "white",
+              fontWeight: "bold",
             }}
           >
-            Entrar
+            {isSubmitting ? "Entrando..." : "Entrar"}
           </Button>
         </MainContainer>
 
@@ -175,9 +175,10 @@ export const Login = () => {
           </Text>
         </View>
 
-
         <LeftVectorContainer>
-          <LeftVectorImage source={require("../../shared/assets/leftVector.png")} />
+          <LeftVectorImage
+            source={require("../../shared/assets/leftVector.png")}
+          />
         </LeftVectorContainer>
       </Container>
     </KeyboardAvoidingView>

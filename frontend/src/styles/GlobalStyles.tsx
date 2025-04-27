@@ -14,10 +14,10 @@ export const FormContainer = styled.View`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  width: "100%";
 `;
 
 export const TextError = styled.Text`
   color: red;
   font-size: 14px;
 `;
-

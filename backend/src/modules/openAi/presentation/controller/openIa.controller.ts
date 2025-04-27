@@ -1,16 +1,17 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
+  Query,
   Res,
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/utils/guards/jwt-auth.guard';
 import { GetPlaceByCity } from '../dto/get-place-by-id.dto';
 import { OpenAiService } from '../../domains/openAi.service';
-import { Response } from 'express';
 
 @Controller('ia')
 export class OpenIaController {
@@ -18,11 +19,14 @@ export class OpenIaController {
 
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
-  @Post('places')
-  async getPlacesbyCity(@Body() { city, country }: GetPlaceByCity) {
+  @Get('places')
+  async getPlacesbyCity(
+    @Query() { city, country, spendingLevel }: GetPlaceByCity,
+  ) {
     const openAiReponse = await this.openIaService.searchPlacesByCity(
       city,
       country,
+      spendingLevel,
     );
 
     return {
