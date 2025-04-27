@@ -9,14 +9,14 @@ import { CreatePlaceDto } from 'src/modules/place/presentation/dto/create-place.
 export class CityGateway implements CityGatewayInterface {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAllCities(): Promise<City[]> {
-    return this.prisma.city.findMany();
+  async findAllCities(userId: number): Promise<City[]> {
+    return this.prisma.city.findMany({ where: { userId } });
   }
 
-  async findCityAndPlaceByExternalId(externalId: string): Promise<City | null> {
+  async findCityAndPlaceByExternalId(cityId: number): Promise<City> {
     return this.prisma.city.findUnique({
       where: {
-        externalId,
+        id: cityId,
       },
       include: {
         Place: {
@@ -50,8 +50,6 @@ export class CityGateway implements CityGatewayInterface {
       name,
       userId,
     };
-
-    console.log('userId ', userId);
 
     return this.prisma.city.create({
       data: {

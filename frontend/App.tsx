@@ -5,25 +5,29 @@ import React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Home } from "./src/screen/Home";
 import { Login } from "./src/screen/Login";
-import SignupScreen from "./src/screen/SignupScreen";
 import { AuthRequiredProvider } from "./src/shared/providers/AuthRequiredProvider";
 import { authStore } from "./src/shared/stores/auth/authStore";
 import { theme } from "./src/styles/theme";
 import { AppStack } from "./src/routes/AppStack";
 import { AuthStack } from "./src/routes/AuthStack";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 const App = () => {
   const isAuthenticated = authStore((store) => store.isAuthenticated);
 
   return (
     <SafeAreaProvider>
-      <ThemeProvider theme={theme}>
-        <AuthRequiredProvider>
-          <NavigationContainer>
-            {isAuthenticated ? <AppStack /> : <AuthStack />}
-          </NavigationContainer>
-        </AuthRequiredProvider>
-      </ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme}>
+          <AuthRequiredProvider>
+            <NavigationContainer>
+              {isAuthenticated ? <AppStack /> : <AuthStack />}
+            </NavigationContainer>
+          </AuthRequiredProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
     </SafeAreaProvider>
   );
 };
