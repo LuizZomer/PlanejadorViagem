@@ -7,9 +7,9 @@ export class CreatePlaceDto {
   @IsString({ message: 'O campo descrição é obrigatório' })
   description: string;
 
-  @IsNumber({}, { message: 'O campo latitude é obrigatório' })
-  latitude: number;
+  @IsString({ message: 'O campo latitude é obrigatório' })
+  latitude: string;
 
-  @IsNumber({}, { message: 'O campo longitude é obrigatório' })
-  longitude: number;
+  @IsString({ message: 'O campo longitude é obrigatório' })
+  longitude: string;
 }

@@ -9,11 +9,8 @@ export class CreateCityDto {
   @IsString({ message: 'O campo nome é obrigatório' })
   country: string;
 
-  @IsString({ message: '' })
+  @IsString({ message: 'O campo description é obrigatório' })
   description: string;
-
-  @IsNumber({}, { message: '' })
-  userId: number;
 
   @ValidateNested({ each: true })
   @IsArray()

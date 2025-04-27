@@ -12,6 +12,7 @@ export class SearchPlacesByCityUseCase {
             role: 'system',
             content: `Sempre responda com um JSON contendo uma lista de 5 locais turísticos no seguinte formato:
                 {
+                  "description": "Uma breve descrição da cidade",
                   "places": [
                     {
                       "name": "Nome do local",
@@ -29,8 +30,6 @@ export class SearchPlacesByCityUseCase {
         ],
         response_format: { type: 'json_object' },
       });
-
-      console.log(res.choices[0].message.content);
 
       const jsonResponse = res.choices[0]?.message?.content;
 

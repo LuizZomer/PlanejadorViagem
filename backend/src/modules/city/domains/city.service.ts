@@ -15,7 +15,7 @@ export class CityService {
     return this.getAllCitiesUseCase.execute();
   }
 
-  async createCity(cityData: CreateCityDto) {
-    return this.createCityUseCase.execute(cityData);
+  async createCity(cityData: CreateCityDto, username: string) {
+    return this.createCityUseCase.execute(cityData, username);
   }
 }

@@ -6,8 +6,11 @@ import { GetCityByExternalIdUseCase } from './domains/use-case/get-city-by-exter
 import { GetAllCitiesUseCase } from './domains/use-case/get-all-cities.use-case';
 import { CityController } from './presentation/controllers/city.controller';
 import { CreateCityWithUseCase } from './domains/use-case/create-city-with-places.use-case';
+import { UserService } from '../user/domains/user.service';
+import { UserModule } from '../user/user.module';
 
 @Module({
+  imports: [UserModule],
   controllers: [CityController],
   providers: [
     CityService,

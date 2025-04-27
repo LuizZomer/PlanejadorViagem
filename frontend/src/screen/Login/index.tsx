@@ -1,41 +1,27 @@
-import {
-  Text,
-  TextInput,
-  View,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableOpacity,
-  Image,
-  ImageBackground,
-} from "react-native";
-import React from "react";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { z } from "zod";
-import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LinearGradient } from "expo-linear-gradient";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import AntDesign from "react-native-vector-icons/AntDesign";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { Button, Input } from "@rneui/themed";
+import { LinearGradient } from "expo-linear-gradient";
+import React from "react";
+import { Controller, useForm } from "react-hook-form";
+import { KeyboardAvoidingView, Platform, Text, View } from "react-native";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { z } from "zod";
+import { TRootStackParamList } from "../../routes/AppStack";
+import { login } from "../../services/auth/login";
+import { authStore } from "../../shared/stores/auth/authStore";
 import { FormContainer, MainContainer } from "../../styles/GlobalStyles";
 import {
-  Container,
-  TopImageContainer,
-  TopImage,
   AppName,
   AppNameContainer,
-  SignInText,
-  /*   ForgotPassword, */
-  FooterText,
+  Container,
   LeftVectorContainer,
   LeftVectorImage,
+  SignInText,
+  TopImage,
+  TopImageContainer,
 } from "./styles";
-import axios from "axios";
-import { Alert } from "react-native";
-import { login } from "../../services/auth/login";
-import { useStore } from "zustand";
-import { authStore } from "../../shared/stores/auth/authStore";
-import { TRootStackParamList } from "../../routes/AppStack";
 
 const loginSchema = z.object({
   username: z.string().min(3, "Nome de usuário é obrigatório"),

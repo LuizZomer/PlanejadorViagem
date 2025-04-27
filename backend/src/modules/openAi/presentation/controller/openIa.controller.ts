@@ -29,10 +29,15 @@ export class OpenIaController {
       spendingLevel,
     );
 
+    console.log(openAiReponse);
+
     return {
       statusCode: HttpStatus.OK,
       content: {
         city,
+        country,
+        spendingLevel,
+        description: openAiReponse.description,
         places: openAiReponse.places,
       },
     };

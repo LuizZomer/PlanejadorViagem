@@ -7,6 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { View } from "react-native";
 import { OptionContainer } from "../../shared/components/OptionsButton";
 import { findPlaceByCity } from "../../services/city/find-place-by-city";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { TRootStackParamList } from "../../routes/AppStack";
 
 const schema = z.object({
   city: z.string().min(1, "Campo obrigatório"),
@@ -17,6 +19,8 @@ const schema = z.object({
 type TFormData = z.infer<typeof schema>;
 
 export const ChooseCity = () => {
+  const { navigate } = useNavigation<NavigationProp<TRootStackParamList>>();
+
   const {
     control,
     setValue,
@@ -37,7 +41,7 @@ export const ChooseCity = () => {
 
     const cities = await findPlaceByCity({ city, country, spendingLevel });
 
-    console.log(cities);
+    navigate("PlaceList", cities);
   };
 
   return (
