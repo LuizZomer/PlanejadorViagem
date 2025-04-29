@@ -33,7 +33,7 @@ export class CityGateway implements CityGatewayInterface {
   }
 
   async createCity(cityData: CreateCityDto, userId: number): Promise<City> {
-    const { country, description, name, places } = cityData;
+    const { country, description, name, places, spendingLevel } = cityData;
 
     const placesArray: CreatePlaceDto[] = places.map(
       ({ name, description, latitude, longitude }) => ({
@@ -49,6 +49,7 @@ export class CityGateway implements CityGatewayInterface {
       description,
       name,
       userId,
+      spendingLevel,
     };
 
     return this.prisma.city.create({

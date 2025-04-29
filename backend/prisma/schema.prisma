@@ -20,12 +20,13 @@ model User {
 }
 
 model City {
-  id          Int    @id @default(autoincrement())
-  externalId  String @unique @default(uuid()) @map("external_id")
-  name        String
-  country     String
-  description String
-  userId      Int    @map("user_id")
+  id            Int    @id @default(autoincrement())
+  externalId    String @unique @default(uuid()) @map("external_id")
+  name          String
+  country       String
+  description   String
+  spendingLevel String
+  userId        Int    @map("user_id")
 
   User  User    @relation(fields: [userId], references: [id])
   Place Place[]

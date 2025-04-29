@@ -14,6 +14,7 @@ CREATE TABLE "cities" (
     "name" TEXT NOT NULL,
     "country" TEXT NOT NULL,
     "description" TEXT NOT NULL,
+    "spendingLevel" TEXT NOT NULL,
     "user_id" INTEGER NOT NULL,
     CONSTRAINT "cities_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
@@ -32,7 +33,16 @@ CREATE TABLE "places" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "users_external_id_key" ON "users"("external_id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "users_username_key" ON "users"("username");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "cities_external_id_key" ON "cities"("external_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "places_external_id_key" ON "places"("external_id");

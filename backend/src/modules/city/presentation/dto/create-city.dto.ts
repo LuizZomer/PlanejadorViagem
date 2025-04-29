@@ -12,6 +12,9 @@ export class CreateCityDto {
   @IsString({ message: 'O campo description é obrigatório' })
   description: string;
 
+  @IsString({ message: 'Campo nivel de orçamento é obrigatório' })
+  spendingLevel: string;
+
   @ValidateNested({ each: true })
   @IsArray()
   @Type(() => CreatePlaceDto)

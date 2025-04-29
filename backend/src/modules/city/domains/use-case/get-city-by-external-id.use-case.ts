@@ -19,11 +19,14 @@ export class GetCityByExternalIdUseCase {
   }
 
   citiesMapper(cities: City[]): ICitiesOutput[] {
-    return cities.map(({ country, description, externalId, name }) => ({
-      country,
-      description,
-      externalId,
-      name,
-    }));
+    return cities.map(
+      ({ country, description, externalId, name, spendingLevel }) => ({
+        country,
+        description,
+        externalId,
+        name,
+        spendingLevel,
+      }),
+    );
   }
 }

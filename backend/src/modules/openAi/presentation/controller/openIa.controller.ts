@@ -12,6 +12,7 @@ import {
 import { JwtAuthGuard } from 'src/utils/guards/jwt-auth.guard';
 import { GetPlaceByCity } from '../dto/get-place-by-id.dto';
 import { OpenAiService } from '../../domains/openAi.service';
+import { GetCitiesByDescription } from '../dto/get-cities-by-suggest.dto';
 
 @Controller('ia')
 export class OpenIaController {
@@ -29,8 +30,6 @@ export class OpenIaController {
       spendingLevel,
     );
 
-    console.log(openAiReponse);
-
     return {
       statusCode: HttpStatus.OK,
       content: {
@@ -39,6 +38,27 @@ export class OpenIaController {
         spendingLevel,
         description: openAiReponse.description,
         places: openAiReponse.places,
+      },
+    };
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  @Get('cities')
+  async suggestCitiesByDescription(
+    @Query() { description, spendingLevel }: GetCitiesByDescription,
+  ) {
+    const openAiReponse = await this.openIaService.suggestCitiesByDescription(
+      description,
+      spendingLevel,
+    );
+
+    return {
+      statusCode: HttpStatus.OK,
+      content: {
+        description,
+        spendingLevel,
+        cities: openAiReponse.cities,
       },
     };
   }

@@ -3,4 +3,5 @@ interface ICitiesOutput {
   name: string;
   country: string;
   description: string;
+  spendingLevel: string;
 }
