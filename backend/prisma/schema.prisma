@@ -1,0 +1,50 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id         Int    @id @default(autoincrement())
+  externalId String @unique @default(uuid()) @map("external_id")
+  username   String @unique
+  email      String @unique
+  password   String
+
+  City City[]
+
+  @@map("users")
+}
+
+model City {
+  id            Int    @id @default(autoincrement())
+  externalId    String @unique @default(uuid()) @map("external_id")
+  name          String
+  country       String
+  description   String
+  spendingLevel String
+  userId        Int    @map("user_id")
+
+  User  User    @relation(fields: [userId], references: [id])
+  Place Place[]
+
+  @@map("cities")
+}
+
+model Place {
+  id          Int     @id @default(autoincrement())
+  externalId  String  @unique @default(uuid()) @map("external_id")
+  name        String
+  description String
+  latitude    Decimal
+  longitude   Decimal
+  photoPath   String? @map("photo_path")
+  cityId      Int     @map("city_id")
+
+  City City @relation(fields: [cityId], references: [id])
+
+  @@map("places")
+}
