@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Inject,
   Post,
   Req,
   UseGuards,
@@ -12,10 +13,15 @@ import { CityService } from '../../domains/city.service';
 import { CreateCityDto } from '../dto/create-city.dto';
 import { JwtAuthGuard } from 'src/utils/guards/jwt-auth.guard';
 import { RequestWithUser } from 'src/@types/interfaces/response';
+import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
+import { getCitiesCacheKey } from 'src/utils/cache/citiesCache';
 
 @Controller('city')
 export class CityController {
-  constructor(private readonly cityService: CityService) {}
+  constructor(
+    private readonly cityService: CityService,
+    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
+  ) {}
 
   // @HttpCode(HttpStatus.OK)
   // @UseGuards(JwtAuthGuard)
@@ -34,7 +40,16 @@ export class CityController {
   @Get()
   async getAllCitiesByExternalId(@Req() req: RequestWithUser) {
     const username = req.user.username;
-    const cities = await this.cityService.getAllCityByExternalId(username);
+    const cacheName = getCitiesCacheKey(username);
+
+    let cities: ICitiesOutput[];
+
+    cities = await this.cacheManager.get(cacheName);
+
+    if (!cities) {
+      cities = await this.cityService.getAllCityByExternalId(username);
+      await this.cacheManager.set(cacheName, cities);
+    }
 
     return {
       statusCode: HttpStatus.OK,
@@ -46,8 +61,11 @@ export class CityController {
   @Post()
   async createCity(@Req() req: RequestWithUser, @Body() body: CreateCityDto) {
     const username = req.user.username;
+    const cacheName = getCitiesCacheKey(username);
 
     const newCity = await this.cityService.createCity(body, username);
+
+    this.cacheManager.del(cacheName);
 
     return {
       statusCode: HttpStatus.CREATED,
