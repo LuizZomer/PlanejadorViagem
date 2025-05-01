@@ -15,6 +15,8 @@ CREATE TABLE "cities" (
     "country" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "spendingLevel" TEXT NOT NULL,
+    "latitude" DECIMAL NOT NULL,
+    "longitude" DECIMAL NOT NULL,
     "user_id" INTEGER NOT NULL,
     CONSTRAINT "cities_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );

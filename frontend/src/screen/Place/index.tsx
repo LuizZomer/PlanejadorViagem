@@ -5,27 +5,43 @@ import { Button, ButtonGroup, ListItem, Text } from "@rneui/themed";
 import { createCity } from "../../services/city/save-city";
 import { NavigationRoutesProp } from "../../shared/types/navigation/navigate";
 import { useState } from "react";
+import MapView, { Marker } from "react-native-maps";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const PlacesList = () => {
   const route = useRoute<RouteProp<TRootStackParamList, "PlaceList">>();
   const { navigate } = useNavigation<NavigationRoutesProp>();
-  const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
 
-  const { city, country, description, spendingLevel, places } = route.params;
+  const {
+    city,
+    country,
+    description,
+    spendingLevel,
+    latitude,
+    longitude,
+    places,
+  } = route.params;
+
+  const mutation = useMutation({
+    mutationFn: async (cityData: IFindPlaceByCityOutput) =>
+      createCity(cityData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["get-cities"] });
+      navigate("Home");
+    },
+  });
 
   const handleSaveCity = async () => {
-    setLoading(true);
-    await createCity({
+    await mutation.mutateAsync({
       city,
       country,
       description,
+      latitude,
+      longitude,
       places,
       spendingLevel,
-    }).then(() => {
-      //   navigate("Home");
     });
-
-    setLoading(false);
   };
 
   return (
@@ -36,7 +52,7 @@ export const PlacesList = () => {
       <Text h4>{spendingLevel.toUpperCase()}</Text>
       <View>
         {places.map(({ name, description }) => (
-          <ListItem>
+          <ListItem key={name}>
             <ListItem.Content>
               <ListItem.Title>{name}</ListItem.Title>
               <ListItem.Subtitle>{description}</ListItem.Subtitle>
@@ -44,23 +60,33 @@ export const PlacesList = () => {
           </ListItem>
         ))}
       </View>
-      <View
-        style={{
-          width: "100%",
-          height: 300,
-          backgroundColor: "black",
-          alignItems: "center",
-          justifyContent: "center",
+      <MapView
+        style={{ width: "100%", height: 400 }}
+        initialRegion={{
+          latitude: Number(latitude),
+          longitude: Number(longitude),
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
         }}
       >
-        <Text style={{ fontSize: 20, color: "#fff" }}>Map is hier</Text>
-      </View>
+        {places.map(({ description, latitude, longitude, name }) => (
+          <Marker
+            key={name}
+            coordinate={{
+              latitude: Number(latitude),
+              longitude: Number(longitude),
+            }}
+            title={name}
+            description={description}
+          />
+        ))}
+      </MapView>
       <View style={{ gap: 10, marginTop: 10 }}>
         <Button type="clear" onPress={() => navigate("Home")}>
           Cancelar
         </Button>
         <Button onPress={handleSaveCity}>
-          {loading ? "Salvando..." : "Salvar"}
+          {mutation.isPending ? "Salvando..." : "Salvar"}
         </Button>
       </View>
     </ScrollView>

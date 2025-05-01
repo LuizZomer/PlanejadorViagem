@@ -12,6 +12,12 @@ export class CreateCityDto {
   @IsString({ message: 'O campo description é obrigatório' })
   description: string;
 
+  @IsString({ message: 'O campo latitude da cidade é obrigatório' })
+  latitude: string;
+
+  @IsString({ message: 'O campo longitude da cidade é obrigatório' })
+  longitude: string;
+
   @IsString({ message: 'Campo nivel de orçamento é obrigatório' })
   spendingLevel: string;
 

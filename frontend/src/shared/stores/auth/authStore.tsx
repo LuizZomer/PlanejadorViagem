@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { IUser } from "../../types/user/user";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { decodedUser } from "../../utils/decodedUser";
+import { api } from "../../../services/axios";
 
 interface IAuthStore {
   isAuthenticated: boolean;
@@ -34,6 +35,8 @@ export const authStore = create<IAuthStore>((set) => ({
     }
 
     try {
+      await api.get("/auth");
+
       const user = decodedUser(token);
       set({ user, isAuthenticated: true });
     } catch (error) {

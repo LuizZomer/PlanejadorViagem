@@ -33,8 +33,10 @@ export class OpenIaController {
     return {
       statusCode: HttpStatus.OK,
       content: {
-        city,
-        country,
+        city: openAiReponse.name,
+        country: openAiReponse.country,
+        latitude: openAiReponse.latitude,
+        longitude: openAiReponse.longitude,
         spendingLevel,
         description: openAiReponse.description,
         places: openAiReponse.places,

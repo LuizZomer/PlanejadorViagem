@@ -7,6 +7,7 @@ import * as Styled from "./styles";
 import { InformCityTab } from "../../shared/components/Pages/Home/InformCityTab";
 import { useQuery } from "@tanstack/react-query";
 import { getCities } from "../../services/city/get-cities";
+import MapView, { Marker } from "react-native-maps";
 
 export const Home = () => {
   const user = authStore((store) => store.user);
