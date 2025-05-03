@@ -10,5 +10,7 @@ interface IFindPlaceByCityOutput {
   description: string;
   country: string;
   spendingLevel: string;
+  longitude: string;
+  latitude: string;
   places: IPlace[];
 }
