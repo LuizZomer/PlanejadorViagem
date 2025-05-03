@@ -1,30 +1,30 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { Button, Input } from "@rneui/themed";
+import { Controller, useForm } from "react-hook-form";
 import {
+  Image,
   ImageBackground,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
   KeyboardAvoidingView,
   Platform,
-  TouchableOpacity,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
-import { Image } from "react-native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { LinearGradient } from "expo-linear-gradient";
 import AntDesign from "react-native-vector-icons/AntDesign";
-import { useNavigation } from "@react-navigation/native";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { z } from "zod";
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Input } from "@rneui/themed";
+import { TCombinedStackParamList } from "../../shared/types/navigation/navigate";
 import { FormContainer, MainContainer } from "../../styles/GlobalStyles";
+import { createUser } from "../../services/user/create-user";
 
 const signupSchema = z
   .object({
     username: z.string().min(1, "Nome de usuário é obrigatório"),
-    email: z.string().email("Email inválido"),
+    email: z.string().min(1, "Campo obrigatório").email("Email inválido"),
     password: z.string().min(6, "A senha deve ter no mínimo 6 caracteres"),
-    confirmPassword: z.string().min(6, "Confirmação obrigatória"),
+    confirmPassword: z.string(),
   })
   .superRefine((val, ctx) => {
     if (val.password !== val.confirmPassword) {
@@ -36,10 +36,11 @@ const signupSchema = z
     }
   });
 
-type TSignup = z.infer<typeof signupSchema>;
+export type TSignup = z.infer<typeof signupSchema>;
 
-export const SignupScreen = () => {
-  const navigation = useNavigation<any>();
+export const Signup = () => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<TCombinedStackParamList>>();
 
   const {
     control,
@@ -55,9 +56,13 @@ export const SignupScreen = () => {
     },
   });
 
-  const handleRegister = (data: TSignup) => {
+  const handleRegister = async (data: TSignup) => {
     console.log("Registrando:", data);
-    //Chamar a nav depois
+    const { confirmPassword, ...rest } = data;
+
+    await createUser(rest).then(() => {
+      navigation.navigate("Login");
+    });
   };
 
   return (

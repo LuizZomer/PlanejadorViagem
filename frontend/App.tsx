@@ -1,16 +1,13 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ThemeProvider } from "@rneui/themed";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { Home } from "./src/screen/Home";
-import { Login } from "./src/screen/Login";
+import { AppStack } from "./src/routes/AppStack";
+import { AuthStack } from "./src/routes/AuthStack";
 import { AuthRequiredProvider } from "./src/shared/providers/AuthRequiredProvider";
 import { authStore } from "./src/shared/stores/auth/authStore";
 import { theme } from "./src/styles/theme";
-import { AppStack } from "./src/routes/AppStack";
-import { AuthStack } from "./src/routes/AuthStack";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
 

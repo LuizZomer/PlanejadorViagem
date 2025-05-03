@@ -2,16 +2,19 @@ import React from "react";
 import { ScrollView, View } from "react-native";
 import { authStore } from "../../shared/stores/auth/authStore";
 import { Text } from "@rneui/base";
-import { Card, Tab, TabView } from "@rneui/themed";
+import { Card, Icon, Tab, TabView } from "@rneui/themed";
 import * as Styled from "./styles";
 import { InformCityTab } from "../../shared/components/Pages/Home/InformCityTab";
 import { useQuery } from "@tanstack/react-query";
 import { getCities } from "../../services/city/get-cities";
-import MapView, { Marker } from "react-native-maps";
+import { useNavigation } from "@react-navigation/native";
+import { NavigationRoutesProp } from "../../shared/types/navigation/navigate";
+import { SuggestCity } from "../../shared/components/Pages/Home/SuggestCity";
 
 export const Home = () => {
   const user = authStore((store) => store.user);
   const [tabIndex, setTabIndex] = React.useState(0);
+  const navigate = useNavigation<NavigationRoutesProp>();
 
   const { data = [], isLoading } = useQuery({
     queryKey: ["get-cities"],
@@ -23,6 +26,13 @@ export const Home = () => {
     <ScrollView>
       <Styled.Header>
         <Text h3>Bem vindo {user?.username}</Text>
+        <Icon
+          name="account"
+          type="material-community"
+          color="#517fa4"
+          size={30}
+          onPress={() => navigate.navigate("Profile")}
+        />
       </Styled.Header>
       <Styled.TabContainer>
         <Tab
@@ -51,9 +61,9 @@ export const Home = () => {
           <TabView.Item style={{ width: "100%", height: "100%" }}>
             <InformCityTab />
           </TabView.Item>
-          {/* <TabView.Item style={{ width: "100%" }}>
-            <Styled.RequestCityTab />
-          </TabView.Item> */}
+          <TabView.Item style={{ width: "100%" }}>
+            <SuggestCity />
+          </TabView.Item>
         </TabView>
       </Styled.TabContainer>
       {isLoading && <Text>Loading...</Text>}

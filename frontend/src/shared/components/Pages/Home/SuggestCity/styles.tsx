@@ -1,8 +1,8 @@
 import styled from "styled-components/native";
 
-export const InformCityContainer = styled.View`
+export const SuggestCityContainer = styled.View`
   box-shadow: 1px 1px 1px black;
-  min-height: 170px;
+  min-height: 150px;
   border: 1px solid black;
   border-radius: 10px;
   display: flex;

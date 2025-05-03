@@ -22,6 +22,8 @@ import {
   TopImage,
   TopImageContainer,
 } from "./styles";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { TCombinedStackParamList } from "../../shared/types/navigation/navigate";
 
 const loginSchema = z.object({
   username: z.string().min(3, "Nome de usuário é obrigatório"),
@@ -31,7 +33,8 @@ const loginSchema = z.object({
 export type TLogin = z.infer<typeof loginSchema>;
 
 export const Login = () => {
-  const navigation = useNavigation<NavigationProp<TRootStackParamList>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<TCombinedStackParamList>>();
   const storeLogin = authStore((store) => store.login);
 
   const {
@@ -53,7 +56,7 @@ export const Login = () => {
   const handleLogin = async (data: TLogin) => {
     return login(data).then((token) => {
       storeLogin(token);
-      navigation.navigate("Home");
+      // navigation.navigate("Home");
     });
   };
 
