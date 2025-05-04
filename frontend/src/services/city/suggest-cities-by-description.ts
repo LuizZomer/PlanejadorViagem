@@ -4,7 +4,7 @@ import { api } from "../axios";
 export const suggestCitiesByDescription = async ({
   description,
   spendingLevel,
-}: SuggestCityFormData) => {
+}: SuggestCityFormData): Promise<IGetCityByDescription> => {
   const res = await api.get("/ia/cities", {
     params: {
       spendingLevel,

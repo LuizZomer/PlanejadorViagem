@@ -1,8 +1,7 @@
-import { TextInput, View } from "react-native";
-import * as S from "./styles";
-import { Button, Text } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
+import { Button, Text } from "@rneui/themed";
 import { NavigationRoutesProp } from "../../../../types/navigation/navigate";
+import * as S from "./styles";
 
 export const SuggestCity = () => {
   const navigate = useNavigation<NavigationRoutesProp>();
@@ -15,7 +14,7 @@ export const SuggestCity = () => {
       </Text>
       <Button
         onPress={() => {
-          navigate.navigate("InformCity");
+          navigate.navigate("SuggestCity");
         }}
       >
         Abrir opções

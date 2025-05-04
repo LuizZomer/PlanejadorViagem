@@ -1,28 +1,31 @@
-import { useState } from "react";
-import { View } from "react-native";
-import * as S from "./styles";
 import { Text } from "@rneui/themed";
+import { useEffect, useState } from "react";
 import { TextError } from "../../../styles/GlobalStyles";
+import * as S from "./styles";
 
-interface IOptionsContainer {
-  options: {
-    label: string;
-    id: string;
-  }[];
-  title: string;
-  onChange: (selected: string) => void;
-  error: string | undefined;
+interface OptionItem<T> {
+  label: string;
+  id: T;
 }
 
-export const OptionContainer = ({
+interface IOptionsContainer<T extends string> {
+  options: OptionItem<T>[];
+  title: string;
+  onChange: (selected: T) => void;
+  defaultValue: T;
+  error?: string;
+}
+
+export function OptionContainer<T extends string>({
   options,
   onChange,
   title,
   error,
-}: IOptionsContainer) => {
-  const [selected, setSelected] = useState(options[0].id);
+  defaultValue,
+}: IOptionsContainer<T>) {
+  const [selected, setSelected] = useState(defaultValue);
 
-  const handleClick = (id: string) => {
+  const handleClick = (id: T) => {
     setSelected(id);
 
     onChange(id);
@@ -47,7 +50,7 @@ export const OptionContainer = ({
       <TextError></TextError>
     </S.OptionsButtonContainer>
   );
-};
+}
 
 interface IButtonOption {
   children: string;

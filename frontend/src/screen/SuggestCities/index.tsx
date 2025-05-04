@@ -5,20 +5,23 @@ import { Controller, useForm } from "react-hook-form";
 import { View } from "react-native";
 import { z } from "zod";
 import { TRootStackParamList } from "../../routes/AppStack";
-import { findPlaceByCity } from "../../services/city/find-place-by-city";
+import { suggestCitiesByDescription } from "../../services/city/suggest-cities-by-description";
 import { OptionContainer } from "../../shared/components/OptionsButton";
 import { FormContainer } from "../../styles/GlobalStyles";
 import * as S from "./styles";
-import { suggestCitiesByDescription } from "../../services/city/suggest-cities-by-description";
 
 const schema = z.object({
-  description: z.string().min(1, "Campo obrigatório"),
+  description: z
+    .string()
+    .trim()
+    .min(1, "Campo obrigatório")
+    .max(200, "Maximo de 200 caracteres"),
   spendingLevel: z.string().min(1, "Campo obrigatório"),
 });
 
 export type SuggestCityFormData = z.infer<typeof schema>;
 
-export const SuggestCitites = () => {
+export const SuggestCities = () => {
   const { navigate } = useNavigation<NavigationProp<TRootStackParamList>>();
 
   const {
@@ -30,7 +33,7 @@ export const SuggestCitites = () => {
     resolver: zodResolver(schema),
     defaultValues: {
       description: "",
-      spendingLevel: "",
+      spendingLevel: "medio",
     },
   });
 
@@ -42,13 +45,15 @@ export const SuggestCitites = () => {
       spendingLevel,
     });
 
-    navigate("PlaceList", cities);
+    console.table(cities);
+
+    navigate("CityList", cities);
   };
 
   return (
     <S.ChooseCityContainer>
       <Text h4 style={{ marginBottom: 20 }}>
-        Crie seu planejamento
+        Passe a descrição do seu planejamento
       </Text>
       <FormContainer>
         <Controller
@@ -60,8 +65,10 @@ export const SuggestCitites = () => {
                 value={field.value}
                 label="Nome da cidade"
                 onChangeText={field.onChange}
-                placeholder="ex: Rio de janeiro"
+                placeholder="Ex: Gostaria de uma cidade com o clima frio no sul do brasil"
                 placeholderTextColor="#9A9A9A"
+                multiline
+                numberOfLines={5}
                 renderErrorMessage
                 errorMessage={errors.description?.message}
               />
@@ -71,6 +78,7 @@ export const SuggestCitites = () => {
 
         <OptionContainer
           title="Faixa de Orçamento"
+          defaultValue="medio"
           options={[
             { id: "pouco", label: "Pouco" },
             { id: "medio", label: "Mediano" },

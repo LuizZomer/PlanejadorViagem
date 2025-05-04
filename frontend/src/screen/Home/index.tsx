@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getCities } from "../../services/city/get-cities";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationRoutesProp } from "../../shared/types/navigation/navigate";
-import { SuggestCity } from "../../shared/components/Pages/Home/SuggestCity";
+import { SuggestCity } from "../../shared/components/Pages/Home/SuggestCityTab";
 
 export const Home = () => {
   const user = authStore((store) => store.user);
