@@ -69,7 +69,10 @@ export class OpenIAGateway implements OpenAIInterface {
             "cities": [
               {
                 "name": "Nome da cidade",
+                "country": "Nome do pais"
                 "description": "Uma breve descrição da cidade",
+                "latitude": "Latitude da cidade",
+                "longitude": "Longitude da cidade",
                 "places": [
                   {
                     "name": "Nome do local",
