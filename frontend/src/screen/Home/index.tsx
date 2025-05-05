@@ -1,5 +1,12 @@
 import React from "react";
-import { ScrollView, View, StyleSheet, StatusBar, TouchableOpacity, TextInput } from "react-native";
+import {
+  ScrollView,
+  View,
+  StyleSheet,
+  StatusBar,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
 import { authStore } from "../../shared/stores/auth/authStore";
 import { Text } from "@rneui/base";
 import { Card, Icon } from "@rneui/themed";
@@ -9,10 +16,13 @@ import { getCities } from "../../services/city/get-cities";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationRoutesProp } from "../../shared/types/navigation/navigate";
 import { SuggestCities } from "../SuggestCities";
+import { SuggestCityTab } from "../../shared/components/Pages/Home/SuggestCityTab";
 
 export const Home = () => {
   const user = authStore((store) => store.user);
-  const [selectedOption, setSelectedOption] = React.useState<"inform" | "suggest">("inform");
+  const [selectedOption, setSelectedOption] = React.useState<
+    "inform" | "suggest"
+  >("inform");
   const navigate = useNavigation<NavigationRoutesProp>();
 
   const { data = [], isLoading } = useQuery({
@@ -47,7 +57,13 @@ export const Home = () => {
             ]}
             onPress={() => setSelectedOption("inform")}
           >
-            <Text style={selectedOption === "inform" ? styles.optionTextActive : styles.optionText}>
+            <Text
+              style={
+                selectedOption === "inform"
+                  ? styles.optionTextActive
+                  : styles.optionText
+              }
+            >
               Informar Cidade
             </Text>
           </TouchableOpacity>
@@ -59,14 +75,20 @@ export const Home = () => {
             ]}
             onPress={() => setSelectedOption("suggest")}
           >
-            <Text style={selectedOption === "suggest" ? styles.optionTextActive : styles.optionText}>
+            <Text
+              style={
+                selectedOption === "suggest"
+                  ? styles.optionTextActive
+                  : styles.optionText
+              }
+            >
               Pedir Sugestão
             </Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.tabView}>
-          {selectedOption === "inform" ? <InformCityTab /> : <SuggestCities />}
+          {selectedOption === "inform" ? <InformCityTab /> : <SuggestCityTab />}
         </View>
 
         {isLoading ? (

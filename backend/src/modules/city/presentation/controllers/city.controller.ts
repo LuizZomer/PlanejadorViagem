@@ -1,3 +1,4 @@
+import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import {
   Body,
   Controller,
@@ -5,16 +6,16 @@ import {
   HttpCode,
   HttpStatus,
   Inject,
+  Param,
   Post,
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { RequestWithUser } from 'src/@types/interfaces/response';
+import { getCitiesCacheKey } from 'src/utils/cache/citiesCache';
+import { JwtAuthGuard } from 'src/utils/guards/jwt-auth.guard';
 import { CityService } from '../../domains/city.service';
 import { CreateCityDto } from '../dto/create-city.dto';
-import { JwtAuthGuard } from 'src/utils/guards/jwt-auth.guard';
-import { RequestWithUser } from 'src/@types/interfaces/response';
-import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
-import { getCitiesCacheKey } from 'src/utils/cache/citiesCache';
 
 @Controller('city')
 export class CityController {
@@ -55,6 +56,13 @@ export class CityController {
       statusCode: HttpStatus.OK,
       content: { cities },
     };
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  @Get(':externalId')
+  async getCityByExternalId(@Param('externalId') externalId: string) {
+    return this.cityService.findCityByExternalId(externalId);
   }
 
   @UseGuards(JwtAuthGuard)

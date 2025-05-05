@@ -4,6 +4,7 @@ import { PrismaService } from 'src/core/prisma/prisma.service';
 import { CreateCityDto } from '../presentation/dto/create-city.dto';
 import { CityGatewayInterface } from './city-gateway.interface';
 import { CreatePlaceDto } from 'src/modules/place/presentation/dto/create-place.dto';
+import { ICityWithPlaces } from '../presentation/types/cityWithPlaces';
 
 @Injectable()
 export class CityGateway implements CityGatewayInterface {
@@ -81,6 +82,13 @@ export class CityGateway implements CityGatewayInterface {
           },
         },
       },
+    });
+  }
+
+  async findCityByExternalId(externalId: string): Promise<ICityWithPlaces> {
+    return this.prisma.city.findFirst({
+      where: { externalId },
+      include: { Place: true },
     });
   }
 }

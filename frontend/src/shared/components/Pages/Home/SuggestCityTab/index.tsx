@@ -3,7 +3,7 @@ import { Button, Text } from "@rneui/themed";
 import { NavigationRoutesProp } from "../../../../types/navigation/navigate";
 import * as S from "./styles";
 
-export const SuggestCity = () => {
+export const SuggestCityTab = () => {
   const navigate = useNavigation<NavigationRoutesProp>();
 
   return (
