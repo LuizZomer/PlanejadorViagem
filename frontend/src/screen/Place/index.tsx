@@ -1,12 +1,11 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { ScrollView, View } from "react-native";
+import { Button } from "@rneui/themed";
 import { TRootStackParamList } from "../../routes/AppStack";
-import { Button, ButtonGroup, ListItem, Text } from "@rneui/themed";
 import { createCity } from "../../services/city/save-city";
 import { NavigationRoutesProp } from "../../shared/types/navigation/navigate";
-import { useState } from "react";
-import MapView, { Marker } from "react-native-maps";
+import { Marker } from "react-native-maps";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import * as S from "./styles";
 
 export const PlacesList = () => {
   const route = useRoute<RouteProp<TRootStackParamList, "PlaceList">>();
@@ -45,50 +44,56 @@ export const PlacesList = () => {
   };
 
   return (
-    <ScrollView>
-      <Text h3>Pontos turisticos {city}</Text>
-      <Text h4>{country}</Text>
-      <Text h4>{description}</Text>
-      <Text h4>{spendingLevel.toUpperCase()}</Text>
-      <View>
-        {places.map(({ name, description }) => (
-          <ListItem key={name}>
-            <ListItem.Content>
-              <ListItem.Title>{name}</ListItem.Title>
-              <ListItem.Subtitle>{description}</ListItem.Subtitle>
-            </ListItem.Content>
-          </ListItem>
-        ))}
-      </View>
-      <MapView
-        style={{ width: "100%", height: 400 }}
-        initialRegion={{
-          latitude: Number(latitude),
-          longitude: Number(longitude),
-          latitudeDelta: 0.01,
-          longitudeDelta: 0.01,
-        }}
-      >
-        {places.map(({ description, latitude, longitude, name }) => (
-          <Marker
-            key={name}
-            coordinate={{
-              latitude: Number(latitude),
-              longitude: Number(longitude),
-            }}
-            title={name}
-            description={description}
-          />
-        ))}
-      </MapView>
-      <View style={{ gap: 10, marginTop: 10 }}>
-        <Button type="clear" onPress={() => navigate("Home")}>
+    <S.Container>
+      <S.Header>
+        <S.Title>Pontos turísticos {city}</S.Title>
+        <S.Subtitle>{country}</S.Subtitle>
+
+        <S.DescriptionBox>
+          <S.DescriptionText>
+            {description}. {spendingLevel.toUpperCase()}
+          </S.DescriptionText>
+        </S.DescriptionBox>
+      </S.Header>
+
+      {places.map(({ name, description }) => (
+        <S.PlaceCard key={name}>
+          <S.PlaceTitle>{name}</S.PlaceTitle>
+          <S.PlaceDescription>{description}</S.PlaceDescription>
+        </S.PlaceCard>
+      ))}
+
+      <S.MapContainer>
+        <S.StyledMap
+          initialRegion={{
+            latitude: Number(latitude),
+            longitude: Number(longitude),
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
+          }}
+        >
+          {places.map(({ description, latitude, longitude, name }) => (
+            <Marker
+              key={name}
+              coordinate={{
+                latitude: Number(latitude),
+                longitude: Number(longitude),
+              }}
+              title={name}
+              description={description}
+            />
+          ))}
+        </S.StyledMap>
+      </S.MapContainer>
+
+      <S.ButtonGroup>
+        <S.CancelButton type="clear" onPress={() => navigate("Home")}>
           Cancelar
-        </Button>
-        <Button onPress={handleSaveCity}>
+        </S.CancelButton>
+        <S.SaveButton onPress={handleSaveCity}>
           {mutation.isPending ? "Salvando..." : "Salvar"}
-        </Button>
-      </View>
-    </ScrollView>
+        </S.SaveButton>
+      </S.ButtonGroup>
+    </S.Container>
   );
 };
