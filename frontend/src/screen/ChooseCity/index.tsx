@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 24,
     fontWeight: "bold",
-    color: "#333",
+    color: "#00BFFF"
   },
   form: {
     backgroundColor: "#FFFFFF",

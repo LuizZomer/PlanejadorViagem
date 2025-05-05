@@ -46,8 +46,8 @@ export const PlacesList = () => {
   return (
     <S.Container>
       <S.Header>
-        <S.Title>Pontos turísticos {city}</S.Title>
-        <S.Subtitle>{country}</S.Subtitle>
+        <S.Title style={{ color: "#00BFFF" }}>Pontos turísticos {city}</S.Title>
+        <S.Subtitle>País: {country}</S.Subtitle>
 
         <S.DescriptionBox>
           <S.DescriptionText>
@@ -58,7 +58,7 @@ export const PlacesList = () => {
 
       {places.map(({ name, description }) => (
         <S.PlaceCard key={name}>
-          <S.PlaceTitle>{name}</S.PlaceTitle>
+          <S.PlaceTitle style={{ color: "#00BFFF" }}>{name}</S.PlaceTitle>
           <S.PlaceDescription>{description}</S.PlaceDescription>
         </S.PlaceCard>
       ))}

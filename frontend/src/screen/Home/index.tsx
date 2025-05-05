@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  ScrollView,
-  View,
-  StyleSheet,
-  StatusBar,
-  TouchableOpacity,
-  TextInput,
-} from "react-native";
+import { StatusBar } from "react-native";
 import { authStore } from "../../shared/stores/auth/authStore";
 import { Text } from "@rneui/base";
 import { Card, Icon } from "@rneui/themed";
@@ -17,6 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NavigationRoutesProp } from "../../shared/types/navigation/navigate";
 import { SuggestCities } from "../SuggestCities";
 import { SuggestCityTab } from "../../shared/components/Pages/Home/SuggestCityTab";
+import * as S from "./styles";
 
 export const Home = () => {
   const user = authStore((store) => store.user);
@@ -32,13 +26,12 @@ export const Home = () => {
   });
 
   return (
-    <View style={styles.screen}>
-      <StatusBar barStyle="light-content" backgroundColor="#007BFF" />
+    <S.Screen>
+      <StatusBar barStyle="light-content" backgroundColor="#00BFFF" />
 
-      {/* Top Navigation */}
-      <View style={styles.topBar}>
+      <S.TopBar>
         <Icon name="home" type="material" color="#fff" size={28} />
-        <Text style={styles.topBarTitle}>Bem-vindo, {user?.username}</Text>
+        <S.TopBarTitle>Bem-vindo, {user?.username}</S.TopBarTitle>
         <Icon
           name="person"
           type="material"
@@ -46,173 +39,47 @@ export const Home = () => {
           size={28}
           onPress={() => navigate.navigate("Profile")}
         />
-      </View>
+      </S.TopBar>
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={styles.optionButtons}>
-          <TouchableOpacity
-            style={[
-              styles.optionButton,
-              selectedOption === "inform" && styles.optionButtonActive,
-            ]}
+      <S.ScrollContent>
+        <S.OptionButtons>
+          <S.OptionButton
+            active={selectedOption === "inform"}
             onPress={() => setSelectedOption("inform")}
           >
-            <Text
-              style={
-                selectedOption === "inform"
-                  ? styles.optionTextActive
-                  : styles.optionText
-              }
-            >
+            <S.OptionText active={selectedOption === "inform"}>
               Informar Cidade
-            </Text>
-          </TouchableOpacity>
+            </S.OptionText>
+          </S.OptionButton>
 
-          <TouchableOpacity
-            style={[
-              styles.optionButton,
-              selectedOption === "suggest" && styles.optionButtonActive,
-            ]}
+          <S.OptionButton
+            active={selectedOption === "suggest"}
             onPress={() => setSelectedOption("suggest")}
           >
-            <Text
-              style={
-                selectedOption === "suggest"
-                  ? styles.optionTextActive
-                  : styles.optionText
-              }
-            >
+            <S.OptionText active={selectedOption === "suggest"}>
               Pedir Sugestão
-            </Text>
-          </TouchableOpacity>
-        </View>
+            </S.OptionText>
+          </S.OptionButton>
+        </S.OptionButtons>
 
-        <View style={styles.tabView}>
-          {selectedOption === "inform" ? <InformCityTab /> : <SuggestCityTab />}
-        </View>
+        <S.TabView>
+          {selectedOption === "inform" ? <InformCityTab /> : <SuggestCities />}
+        </S.TabView>
 
         {isLoading ? (
-          <Text style={styles.loading}>Carregando cidades...</Text>
+          <S.Loading>Carregando cidades...</S.Loading>
         ) : (
-          <View style={styles.cardsContainer}>
+          <S.CardsContainer>
             {data.map(({ country, description, externalId, name }) => (
-              <Card key={externalId} containerStyle={styles.card}>
-                <Card.Title style={styles.cardTitle}>{name}</Card.Title>
-                <View>
-                  <Text style={styles.cardCountry}>{country}</Text>
-                  <Text style={styles.cardDescription}>{description}</Text>
-                </View>
-              </Card>
+              <S.Card key={externalId}>
+                <S.CardTitle>{name}</S.CardTitle>
+                <S.CardCountry>{country}</S.CardCountry>
+                <S.CardDescription>{description}</S.CardDescription>
+              </S.Card>
             ))}
-          </View>
+          </S.CardsContainer>
         )}
-      </ScrollView>
-    </View>
+      </S.ScrollContent>
+    </S.Screen>
   );
 };
-
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: "#f0f4f8",
-  },
-  topBar: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: "#007BFF",
-    paddingVertical: 14,
-    paddingHorizontal: 20,
-    elevation: 4,
-  },
-  topBarTitle: {
-    fontSize: 18,
-    color: "#fff",
-    fontWeight: "bold",
-  },
-  scrollContent: {
-    padding: 20,
-    paddingBottom: 40,
-  },
-  optionButtons: {
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: 16,
-    marginBottom: 24,
-  },
-  optionButton: {
-    paddingVertical: 14,
-    paddingHorizontal: 24,
-    borderRadius: 12,
-    backgroundColor: "#e0e0e0",
-  },
-  optionButtonActive: {
-    backgroundColor: "#007BFF",
-  },
-  optionText: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#333",
-  },
-  optionTextActive: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#fff",
-  },
-  tabView: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 30,
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    elevation: 2,
-  },
-  loading: {
-    textAlign: "center",
-    marginVertical: 20,
-    color: "#555",
-  },
-  cardsContainer: {
-    gap: 12,
-  },
-  card: {
-    borderRadius: 10,
-    padding: 16,
-    backgroundColor: "#fff",
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    elevation: 3,
-  },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#007BFF",
-  },
-  cardCountry: {
-    fontWeight: "600",
-    marginTop: 5,
-    color: "#444",
-  },
-  cardDescription: {
-    color: "#666",
-    marginTop: 4,
-  },
-  input: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    marginBottom: 16,
-    shadowColor: "#000",
-    shadowOpacity: 0.04,
-    shadowOffset: { width: 0, height: 1 },
-    shadowRadius: 3,
-    elevation: 2,
-  },
-});
