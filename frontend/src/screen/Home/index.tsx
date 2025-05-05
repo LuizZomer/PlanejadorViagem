@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getCities } from "../../services/city/get-cities";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationRoutesProp } from "../../shared/types/navigation/navigate";
-import { SuggestCity } from "../../shared/components/Pages/Home/SuggestCity";
+import { SuggestCities } from "../SuggestCities";
 
 export const Home = () => {
   const user = authStore((store) => store.user);
@@ -39,7 +39,6 @@ export const Home = () => {
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* Botões centrais */}
         <View style={styles.optionButtons}>
           <TouchableOpacity
             style={[
@@ -67,7 +66,7 @@ export const Home = () => {
         </View>
 
         <View style={styles.tabView}>
-          {selectedOption === "inform" ? <InformCityTab /> : <SuggestCity />}
+          {selectedOption === "inform" ? <InformCityTab /> : <SuggestCities />}
         </View>
 
         {isLoading ? (
