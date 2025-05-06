@@ -75,7 +75,7 @@ export const CardsContainer = styled.View`
   gap: 12px;
 `;
 
-export const Card = styled.View`
+export const Card = styled.TouchableOpacity`
   width: 100%;
   min-height: 140px;
   border-radius: 10px;

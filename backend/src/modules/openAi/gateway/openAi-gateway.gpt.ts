@@ -20,9 +20,9 @@ export class OpenIAGateway implements OpenAIInterface {
             content: `Sempre responda com um JSON contendo uma lista de 5 locais turísticos no seguinte formato:
                       {
                         "name": "Nome da cidade",
-                        "country": "Nome do pais"
+                        "country": "Nome do pais",
                         "description": "Uma breve descrição da cidade",
-                        "latitude": "Latitude da cidade",
+                        "latitude": "Latitude da cidade", #Aqui coloque apenas numeros
                         "longitude": "Longitude da cidade",
                         "places": [
                           {

@@ -70,7 +70,7 @@ export const Home = () => {
         ) : (
           <S.CardsContainer>
             {data.map(({ country, description, externalId, name }) => (
-              <S.Card key={externalId}>
+              <S.Card key={externalId} onPress={() => navigate.navigate("CityDetails", { externalId })}>
                 <S.CardTitle>{name}</S.CardTitle>
                 <S.CardCountry>{country}</S.CardCountry>
                 <S.CardDescription>{description}</S.CardDescription>
