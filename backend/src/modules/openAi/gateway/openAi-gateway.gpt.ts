@@ -32,7 +32,10 @@ export class OpenIAGateway implements OpenAIInterface {
                             "longitude": "Longitude do local",
                           }
                         ]
-                      }`,
+                      }
+                        
+                      Não adicione nenhuma chave no inicio como data, content e similares, me envie oque eu pedi sendo
+                      a raiz do json`,
           },
           {
             role: 'user',
@@ -43,6 +46,8 @@ export class OpenIAGateway implements OpenAIInterface {
       });
 
       const jsonResponse = res.choices[0]?.message?.content;
+
+      console.log(JSON.parse(jsonResponse));
 
       return jsonResponse ? JSON.parse(jsonResponse) : null;
     } catch (err) {

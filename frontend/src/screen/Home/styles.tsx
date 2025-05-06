@@ -9,7 +9,7 @@ export const TopBar = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background-color: #00BFFF;
+  background-color: #00bfff;
   padding-vertical: 14px;
   padding-horizontal: 20px;
   elevation: 4;
@@ -44,7 +44,7 @@ export const OptionButton = styled.TouchableOpacity<ActiveProp>`
   padding-vertical: 14px;
   padding-horizontal: 24px;
   border-radius: 12px;
-  background-color: ${(props) => (props.active ? "#007bff" : "#e0e0e0")};
+  background-color: ${(props) => (props.active ? "#00BFFF" : "#e0e0e0")};
 `;
 
 export const OptionText = styled.Text<ActiveProp>`

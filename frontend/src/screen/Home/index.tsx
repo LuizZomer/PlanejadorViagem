@@ -8,7 +8,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getCities } from "../../services/city/get-cities";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationRoutesProp } from "../../shared/types/navigation/navigate";
-import { SuggestCities } from "../SuggestCities";
 import { SuggestCityTab } from "../../shared/components/Pages/Home/SuggestCityTab";
 import * as S from "./styles";
 
@@ -63,7 +62,7 @@ export const Home = () => {
         </S.OptionButtons>
 
         <S.TabView>
-          {selectedOption === "inform" ? <InformCityTab /> : <SuggestCities />}
+          {selectedOption === "inform" ? <InformCityTab /> : <SuggestCityTab />}
         </S.TabView>
 
         {isLoading ? (
