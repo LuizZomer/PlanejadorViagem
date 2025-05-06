@@ -25,7 +25,7 @@ export const OptionButton = styled.Pressable<{ $isSelected: boolean }>`
   flex-shrink: 1;
   flex-grow: 1;
   background-color: ${({ $isSelected }: { $isSelected: boolean }) =>
-    $isSelected ? "blue" : "gray"};
+    $isSelected ? "#00BFFF" : "gray"};
   padding: 10px;
   border-radius: 8px;
   align-items: center;

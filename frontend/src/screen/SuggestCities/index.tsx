@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { Button, Input, Text } from "@rneui/themed";
+import { Input, Text } from "@rneui/themed";
 import { Controller, useForm } from "react-hook-form";
 import { View } from "react-native";
 import { z } from "zod";
@@ -39,28 +39,26 @@ export const SuggestCities = () => {
 
   const handleSend = async (data: SuggestCityFormData) => {
     const { description, spendingLevel } = data;
-
     const cities = await suggestCitiesByDescription({
       description,
       spendingLevel,
     });
-
-    console.table(cities);
-
     navigate("CityList", cities);
   };
 
   return (
     <S.ChooseCityContainer>
-      <Text h4 style={{ marginBottom: 20 }}>
+      <S.Header>
+      <Text h4 style={{ color: "#00BFFF", marginBottom: 20 }}>
         Passe a descrição do seu planejamento
       </Text>
+      </S.Header>
       <FormContainer>
-        <Controller
-          name="description"
-          control={control}
-          render={({ field }) => (
-            <View>
+        <S.FormWrapper>
+          <Controller
+            name="description"
+            control={control}
+            render={({ field }) => (
               <Input
                 value={field.value}
                 label="Nome da cidade"
@@ -72,25 +70,25 @@ export const SuggestCities = () => {
                 renderErrorMessage
                 errorMessage={errors.description?.message}
               />
-            </View>
-          )}
-        />
+            )}
+          />
 
-        <OptionContainer
-          title="Faixa de Orçamento"
-          defaultValue="medio"
-          options={[
-            { id: "pouco", label: "Pouco" },
-            { id: "medio", label: "Mediano" },
-            { id: "alto", label: "Alto" },
-          ]}
-          onChange={(selected) => setValue("spendingLevel", selected)}
-          error={errors.spendingLevel?.message}
-        />
+          <OptionContainer
+            title="Faixa de Orçamento"
+            defaultValue="medio"
+            options={[
+              { id: "pouco", label: "Pouco" },
+              { id: "medio", label: "Mediano" },
+              { id: "alto", label: "Alto" },
+            ]}
+            onChange={(selected) => setValue("spendingLevel", selected)}
+            error={errors.spendingLevel?.message}
+          />
 
-        <Button onPress={handleSubmit(handleSend)} disabled={isSubmitting}>
-          {isSubmitting ? "Enviando..." : "Enviar"}
-        </Button>
+          <S.StyledButton onPress={handleSubmit(handleSend)} disabled={isSubmitting}>
+            {isSubmitting ? "Enviando..." : "Enviar"}
+          </S.StyledButton>
+        </S.FormWrapper>
       </FormContainer>
     </S.ChooseCityContainer>
   );

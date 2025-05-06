@@ -1,12 +1,11 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { Button, Card, ListItem, Text } from "@rneui/themed";
-import { ScrollView, View } from "react-native";
-import { TRootStackParamList } from "../../routes/AppStack";
-import { NavigationRoutesProp } from "../../shared/types/navigation/navigate";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { NavigationRoutesProp } from "../../shared/types/navigation/navigate";
+import { TRootStackParamList } from "../../routes/AppStack";
 import { createCity } from "../../services/city/save-city";
-import MapView, { Marker } from "react-native-maps";
 import { useState } from "react";
+import { Marker } from "react-native-maps";
+import * as S from "./styles";
 
 export const CityList = () => {
   const route = useRoute<RouteProp<TRootStackParamList, "CityList">>();
@@ -51,69 +50,67 @@ export const CityList = () => {
   };
 
   return (
-    <ScrollView>
-      <Text h4>{description}</Text>
-      <Text h4>Nivel de gastos {spendingLevel}</Text>
-      <View>
-        {suggestedCities.map(
-          ({ country, description, name, places, latitude, longitude }) => (
-            <Card key={name}>
-              <Card.Title>{name}</Card.Title>
-              <View>
-                <Text>{country}</Text>
-                <Text>{description}</Text>
-              </View>
-              {places.map(({ description, name }) => (
-                <ListItem key={name}>
-                  <ListItem.Content>
-                    <ListItem.Title>{name}</ListItem.Title>
-                    <ListItem.Subtitle>{description}</ListItem.Subtitle>
-                  </ListItem.Content>
-                </ListItem>
+    <S.Container>
+      <S.Title>{description}</S.Title>
+      <S.Subtitle>Nível de gastos {spendingLevel}</S.Subtitle>
+
+      {suggestedCities.map(
+        ({ country, description, name, places, latitude, longitude }) => (
+          <S.Card key={name}>
+            <S.CityName>{name}</S.CityName>
+            <S.CountryText>{country}</S.CountryText>
+            <S.DescriptionText>{description}</S.DescriptionText>
+
+            {places.map(({ name, description }) => (
+              <S.PlaceCard key={name}>
+                <S.PlaceTitle>{name}</S.PlaceTitle>
+                <S.PlaceDescription>{description}</S.PlaceDescription>
+              </S.PlaceCard>
+            ))}
+
+            <S.StyledMap
+              initialRegion={{
+                latitude: Number(latitude),
+                longitude: Number(longitude),
+                latitudeDelta: 0.1,
+                longitudeDelta: 0.1,
+              }}
+            >
+              {places.map(({ name, latitude, longitude, description }) => (
+                <Marker
+                  key={name}
+                  coordinate={{
+                    latitude: Number(latitude),
+                    longitude: Number(longitude),
+                  }}
+                  title={name}
+                  description={description}
+                />
               ))}
+            </S.StyledMap>
 
-              <MapView
-                style={{ width: "100%", height: 400 }}
-                initialRegion={{
-                  latitude: Number(latitude),
-                  longitude: Number(longitude),
-                  latitudeDelta: 0.1,
-                  longitudeDelta: 0.1,
-                }}
-              >
-                {places.map(({ description, latitude, longitude, name }) => (
-                  <Marker
-                    key={name}
-                    coordinate={{
-                      latitude: Number(latitude),
-                      longitude: Number(longitude),
-                    }}
-                    title={name}
-                    description={description}
-                  />
-                ))}
-              </MapView>
+            <S.Spacer />
 
-              <Button
-                onPress={() =>
-                  handleSaveCity({
-                    city: name,
-                    country,
-                    description,
-                    latitude,
-                    longitude,
-                    places,
-                  })
-                }
-                disabled={mutation.isPending}
-              >
-                {mutation.isPending ? "Aguardade..." : "Salvar"}
-              </Button>
-            </Card>
-          )
-        )}
-      </View>
-      <Button onPress={handleHomeReturn}>Voltar para a home</Button>
-    </ScrollView>
+            <S.SaveButton
+              onPress={() =>
+                handleSaveCity({
+                  city: name,
+                  country,
+                  description,
+                  latitude,
+                  longitude,
+                  places,
+                })
+              }
+              disabled={mutation.isPending}
+            >
+              {mutation.isPending ? "Aguardando..." : "Salvar"}
+            </S.SaveButton>
+          </S.Card>
+        )
+      )}
+
+      <S.CancelButton onPress={handleHomeReturn}>Voltar para a home</S.CancelButton>
+    </S.Container>
   );
 };

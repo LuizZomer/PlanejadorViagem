@@ -60,7 +60,7 @@ export const ChooseCity = () => {
               onChangeText={field.onChange}
               placeholder="ex: Rio de Janeiro"
               placeholderTextColor="#9A9A9A"
-              leftIcon={<Icon name="location-city" type="material" color="#007BFF" />}
+              leftIcon={<Icon name="location-city" type="material" color="#00BFFF" />}
               errorMessage={errors.city?.message}
               inputStyle={styles.inputText}
               inputContainerStyle={styles.inputContainer}
@@ -80,7 +80,7 @@ export const ChooseCity = () => {
               onChangeText={field.onChange}
               placeholder="ex: Brasil"
               placeholderTextColor="#9A9A9A"
-              leftIcon={<Icon name="public" type="material" color="#007BFF" />}
+              leftIcon={<Icon name="public" type="material" color="#00BFFF" />}
               errorMessage={errors.country?.message}
               inputStyle={styles.inputText}
               inputContainerStyle={styles.inputContainer}
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   button: {
-    backgroundColor: "#007BFF",
+    backgroundColor: "#00BFFF",
     borderRadius: 10,
     paddingVertical: 14,
     marginTop: 20,

@@ -91,12 +91,12 @@ export const CancelButton = styled(Button).attrs({
   buttonStyle: {
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "#007BFF",
+    borderColor: "#00BFFF",
     paddingVertical: 10,
     paddingHorizontal: 20,
   },
   titleStyle: {
-    color: "#007BFF",
+    color: "#00BFFF",
     fontWeight: "bold",
   },
 })``;
@@ -104,7 +104,7 @@ export const CancelButton = styled(Button).attrs({
 export const SaveButton = styled(Button).attrs({
   buttonStyle: {
     borderRadius: 10,
-    backgroundColor: "#007BFF",
+    backgroundColor: "#00BFFF",
     paddingVertical: 10,
     paddingHorizontal: 20,
   },
