@@ -8,35 +8,60 @@ generator client {
 }
 
 model User {
-  id         Int    @id @default(autoincrement())
-  externalId String @unique @default(uuid()) @map("external_id")
-  username   String @unique
-  email      String @unique
-  password   String
+  id          Int               @id @default(autoincrement())
+  externalId  String            @unique @default(uuid()) @map("external_id")
+  username    String            @unique
+  email       String            @unique
+  password    String
+  preferences UserPreferences[]
 
-  City City[]
+  plans             Plan[]
+  userPreferencesId Int?
 
   @@map("users")
 }
 
-model City {
-  id            Int     @id @default(autoincrement())
-  externalId    String  @unique @default(uuid()) @map("external_id")
-  name          String
-  country       String
-  description   String
-  spendingLevel String
-  latitude      Decimal
-  longitude     Decimal
-  userId        Int     @map("user_id")
+model UserPreferences {
+  id            Int    @id @default(autoincrement())
+  externalId    String @unique @default(uuid()) @map("external_id")
+  userId        Int
+  preferencesId Int
 
-  User  User    @relation(fields: [userId], references: [id])
-  Place Place[]
+  preference Preferences @relation(fields: [preferencesId], references: [id])
+  user       User        @relation(fields: [userId], references: [id])
 
-  @@map("cities")
+  @@map("user_preferences")
 }
 
-model Place {
+model Preferences {
+  id              Int               @id @default(autoincrement())
+  externalId      String            @unique @default(uuid()) @map("external_id")
+  name            String
+  UserPreferences UserPreferences[]
+}
+
+model Plan {
+  id            Int      @id @default(autoincrement())
+  externalId    String   @unique @default(uuid()) @map("external_id")
+  destination   String
+  country       String
+  description   String
+  startDate     DateTime
+  endDate       DateTime
+  spendingLevel String
+  hosting       Boolean
+  latitude      Decimal
+  longitude     Decimal
+  userId        Int      @map("user_id")
+
+  user       User              @relation(fields: [userId], references: [id])
+  activities TouristActivity[]
+  TripDay    TripDay[]
+
+  @@map("plans")
+}
+
+model TouristActivity {
   id          Int     @id @default(autoincrement())
   externalId  String  @unique @default(uuid()) @map("external_id")
   name        String
@@ -44,9 +69,21 @@ model Place {
   latitude    Decimal
   longitude   Decimal
   photoPath   String? @map("photo_path")
-  cityId      Int     @map("city_id")
+  planId      Int     @map("plan_id")
 
-  City City @relation(fields: [cityId], references: [id])
+  plan      Plan     @relation(fields: [planId], references: [id])
+  TripDay   TripDay? @relation(fields: [tripDayId], references: [id])
+  tripDayId Int?
 
-  @@map("places")
+  @@map("tourist_spots")
+}
+
+model TripDay {
+  id         Int               @id @default(autoincrement())
+  date       DateTime
+  planId     Int               @map("plan_id")
+  plan       Plan              @relation(fields: [planId], references: [id])
+  activities TouristActivity[]
+
+  @@map("trip_days")
 }

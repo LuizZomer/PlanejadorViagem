@@ -1,18 +1,15 @@
 import {
-  Body,
   Controller,
   Get,
   HttpCode,
   HttpStatus,
-  Post,
   Query,
-  Res,
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/utils/guards/jwt-auth.guard';
-import { GetPlaceByCity } from '../dto/get-place-by-id.dto';
 import { OpenAiService } from '../../domains/openAi.service';
 import { GetCitiesByDescription } from '../dto/get-cities-by-suggest.dto';
+import { GetPlanByCity } from '../dto/get-plan-by-city.dto';
 
 @Controller('ia')
 export class OpenIaController {
@@ -21,25 +18,20 @@ export class OpenIaController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
   @Get('places')
-  async getPlacesbyCity(
-    @Query() { city, country, spendingLevel }: GetPlaceByCity,
-  ) {
-    const openAiReponse = await this.openIaService.searchPlacesByCity(
-      city,
-      country,
-      spendingLevel,
-    );
+  async getPlacesbyCity(@Query() planData: GetPlanByCity) {
+    const openAiReponse = await this.openIaService.searchPlanByCity(planData);
 
     return {
       statusCode: HttpStatus.OK,
       content: {
-        city: openAiReponse.name,
-        country: openAiReponse.country,
-        latitude: openAiReponse.latitude,
-        longitude: openAiReponse.longitude,
-        spendingLevel,
-        description: openAiReponse.description,
-        places: openAiReponse.places,
+        ...openAiReponse,
+        ////city: openAiReponse.name,
+        //country: openAiReponse.country,
+        //latitude: openAiReponse.latitude,
+        //longitude: openAiReponse.longitude,
+        //spendingLevel: ,
+        //description: openAiReponse.description,
+        //places: openAiReponse.places,
       },
     };
   }

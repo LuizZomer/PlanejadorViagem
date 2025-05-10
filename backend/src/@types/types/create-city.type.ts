@@ -1,3 +1,3 @@
-import { City } from '@prisma/client';
+//import { City } from '@prisma/client';
 
-export type TCreateCity = Omit<City, 'id' | 'externalId' | 'userId'>;
+////export type TCreateCity = Omit<City, 'id' | 'externalId' | 'userId'>;

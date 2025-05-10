@@ -1,4 +1,4 @@
-import { TCreateCity } from 'src/@types/types/create-city.type';
+//import { TCreateCity } from 'src/@types/types/create-city.type';
 import { CityGateway } from '../../gateway/city-gateway.prisma';
 import { CreateCityDto } from '../../presentation/dto/create-city.dto';
 import { Injectable } from '@nestjs/common';

@@ -8,9 +8,9 @@ import { UserGatewayInterface } from './user-gateway.interface';
 export class UserGateway implements UserGatewayInterface {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createUser(UserData: CreateUserDto): Promise<User> {
+  async createUser(userData: CreateUserDto): Promise<User> {
     return this.prisma.user.create({
-      data: UserData,
+      data: { ...userData },
     });
   }
 

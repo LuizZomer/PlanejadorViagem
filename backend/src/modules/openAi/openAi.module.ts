@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { SearchPlacesByCityUseCase } from './domains/use-case/search-places-by-city.use-case';
+import { SearchPlanByCityUseCase } from './domains/use-case/search-plan-by-city.use-case';
 import { OpenAiService } from './domains/openAi.service';
 import { OpenIaController } from './presentation/controller/openIa.controller';
 import { OpenIAGateway } from './gateway/openAi-gateway.gpt';
@@ -9,7 +9,7 @@ import { SuggestCitiesByDescriptionUseCase } from './domains/use-case/search-cit
   controllers: [OpenIaController],
   providers: [
     OpenAiService,
-    SearchPlacesByCityUseCase,
+    SearchPlanByCityUseCase,
     SuggestCitiesByDescriptionUseCase,
     OpenIAGateway,
   ],

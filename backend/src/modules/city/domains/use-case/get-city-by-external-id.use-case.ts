@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { CityGateway } from '../../gateway/city-gateway.prisma';
-import { City } from '@prisma/client';
 import {
   ICityWithPlaces,
   ICityWithPlacesMapper,
@@ -16,7 +15,7 @@ export class GetCityByExternalId {
     return this.cityMapper(city);
   }
 
-  cityMapper(city: ICityWithPlaces): ICityWithPlacesMapper {
+  cityMapper(city: any): ICityWithPlacesMapper {
     return {
       country: city.country,
       description: city.description,

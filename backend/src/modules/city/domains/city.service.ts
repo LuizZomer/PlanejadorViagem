@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 // import { GetAllCitiesUseCase } from './use-case/get-all-cities.use-case';
-import { TCreateCity } from 'src/@types/types/create-city.type';
+//import { TCreateCity } from 'src/@types/types/create-city.type';
 import { CreateCityWithUseCase } from './use-case/create-city-with-places.use-case';
 import { CreateCityDto } from '../presentation/dto/create-city.dto';
 import { GetCitiesByUserExternalIdUseCase } from './use-case/get-cities-by-user-external-id.use-case';

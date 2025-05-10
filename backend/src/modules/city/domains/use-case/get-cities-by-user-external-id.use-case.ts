@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CityGateway } from '../../gateway/city-gateway.prisma';
 import { UserService } from 'src/modules/user/domains/user.service';
-import { City } from '@prisma/client';
 
 @Injectable()
 export class GetCitiesByUserExternalIdUseCase {
@@ -18,7 +17,7 @@ export class GetCitiesByUserExternalIdUseCase {
     return this.citiesMapper(cities);
   }
 
-  citiesMapper(cities: City[]): ICitiesOutput[] {
+  citiesMapper(cities: any): ICitiesOutput[] {
     return cities.map(
       ({ country, description, externalId, name, spendingLevel }) => ({
         country,

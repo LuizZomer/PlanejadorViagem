@@ -3,43 +3,61 @@ import { OpenAIInterface } from './openAi-gateway.interface';
 import { openAi } from 'src/core/openAi/openAi';
 import { ISearchPlaceByCityOutput } from 'src/@types/interfaces/outputs/searchPlaceByCityOutput';
 import { ISuggestCitiesByDescriptionOutput } from 'src/@types/interfaces/outputs/suggestCitiesByDescriptionOutput';
+import { GetPlanByCity } from '../presentation/dto/get-plan-by-city.dto';
 
 @Injectable()
 export class OpenIAGateway implements OpenAIInterface {
-  async searchPlaceByCity(
-    city: string,
-    country: string,
-    spendingLevel: string,
-  ): Promise<ISearchPlaceByCityOutput> {
+  async searchPlanByCity({
+    country,
+    destination,
+    endDate,
+    hosting,
+    spendingLevel,
+    startDate,
+  }: GetPlanByCity): Promise<ISearchPlanByCityOutput> {
     try {
       const res = await openAi.chat.completions.create({
         model: 'gpt-4o-mini',
         messages: [
           {
             role: 'system',
-            content: `Sempre responda com um JSON contendo uma lista de 5 locais turísticos no seguinte formato:
-                      {
-                        "name": "Nome da cidade",
-                        "country": "Nome do pais",
-                        "description": "Uma breve descrição da cidade",
-                        "latitude": "Latitude da cidade", #Aqui coloque apenas numeros
-                        "longitude": "Longitude da cidade",
-                        "places": [
-                          {
-                            "name": "Nome do local",
-                            "description": "Breve descrição do local",
-                            "latitude": "Latitude do local",
-                            "longitude": "Longitude do local",
-                          }
-                        ]
-                      }
-                        
-                      Não adicione nenhuma chave no inicio como data, content e similares, me envie oque eu pedi sendo
-                      a raiz do json`,
+            content: `Você é um assistente de planejamento de viagens.
+      
+      Sempre responda com um JSON contendo o plano de viagem no seguinte formato:
+      
+      {
+        "destination": "Nome da cidade",
+        "country": "Nome do país",
+        "description": "Descrição geral do destino",
+        "latitude": "Latitude da cidade",
+        "longitude": "Longitude da cidade",
+        "host": "Lugar para a hospedagem", ##Caso o usuário peça
+        "days": [
+          {
+            "date": "YYYY-MM-DD",
+            "expense": "Total de gastos deste dia em reais", 
+            "activities": [
+              {
+                "name": "Nome da atividade turística",
+                "description": "Breve descrição",
+                "latitude": "Latitude da atividade",
+                "longitude": "Longitude da atividade"
+              }
+            ]
+          }
+        ]
+      }
+      
+      - A chave "days" deve conter um item para **cada dia do período da viagem**.
+      - As atividades devem estar distribuídas ao longo dos dias, com 2 a 4 por dia.
+      - As sugestões devem ser compatíveis com o nível de gasto indicado (pouco, médio, alto).
+      - Todas as latitudes e longitudes devem ser **apenas números**, sem texto.
+      - Não inclua nenhuma chave extra como "data", "content" ou metadados. O JSON deve iniciar com a raiz solicitada acima.
+      `,
           },
           {
             role: 'user',
-            content: `Me forneça 5 lugares turísticos de ${city} em ${country}, incluindo nome, descrição, latitude e longitude. Considere que o orçamento da viagem é '${spendingLevel}' (pouco, médio ou alto). Escolha lugares compatíveis com esse nível de gasto.`,
+            content: `Crie um plano de viagem para a cidade de ${destination}, em ${country}, com início em ${startDate} e fim em ${endDate}, considerando o nível de gasto '${spendingLevel}' (pouco, médio ou alto). ${hosting ? 'E preciso saber da hospedagem' : ''}`,
           },
         ],
         response_format: { type: 'json_object' },
