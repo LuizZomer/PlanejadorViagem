@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { LoginUsecase } from './use-case/login.use-case';
-import { ValidateUserUseCase } from './use-case/validate-user.use-casae';
+import { ValidateUserUseCase } from './use-case/validate-user.use-case';
 
 @Injectable()
 export class AuthService {

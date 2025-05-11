@@ -4,6 +4,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { CityModule } from './modules/plan/plan.module';
 import { OpenAiModule } from './modules/openAi/openAi.module';
 import { CacheModule } from '@nestjs/cache-manager';
+import { FriendshipModule } from './modules/friendship/friendship.module';
 
 @Module({
   imports: [
@@ -15,6 +16,8 @@ import { CacheModule } from '@nestjs/cache-manager';
     AuthModule,
     CityModule,
     OpenAiModule,
+    FriendshipModule,
+    FriendshipModule,
   ],
 })
 export class AppModule {}

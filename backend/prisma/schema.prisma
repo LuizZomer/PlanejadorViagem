@@ -15,10 +15,24 @@ model User {
   password    String
   preferences UserPreferences[]
 
-  plans             Plan[]
-  userPreferencesId Int?
+  plans               Plan[]
+  userPreferencesId   Int?
+  sentFriendships     Friendship[] @relation("SentFriendships")
+  receivedFriendships Friendship[] @relation("ReceivedFriendships")
 
   @@map("users")
+}
+
+model Friendship {
+  id          Int      @id @default(autoincrement())
+  externalId  String   @unique @default(uuid()) @map("external_id")
+  requesterId Int
+  receiverId  Int
+  status      String // e.g., 'pending', 'accepted', 'blocked'
+  createdAt   DateTime @default(now())
+
+  receiver  User @relation("SentFriendships", fields: [receiverId], references: [id])
+  requester User @relation("ReceivedFriendships", fields: [requesterId], references: [id])
 }
 
 model UserPreferences {

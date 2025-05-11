@@ -21,4 +21,22 @@ export class UserGateway implements UserGatewayInterface {
       },
     });
   }
+
+  async findOneByExternalId(externalId: string): Promise<User | null> {
+    return this.prisma.user.findUnique({
+      where: {
+        externalId,
+      },
+    });
+  }
+
+  async findAllUsers(search: string | undefined) {
+    return this.prisma.user.findMany({
+      where: {
+        username: {
+          contains: search || '',
+        },
+      },
+    });
+  }
 }

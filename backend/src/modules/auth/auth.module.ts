@@ -5,7 +5,7 @@ import { AuthService } from './domains/auth.service';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { AuthController } from './presentation/controller/auth.controller';
 import { LocalStrategy } from './strategy/local.strategy';
-import { ValidateUserUseCase } from './domains/use-case/validate-user.use-casae';
+import { ValidateUserUseCase } from './domains/use-case/validate-user.use-case';
 import { LoginUsecase } from './domains/use-case/login.use-case';
 
 @Module({
