@@ -3,6 +3,8 @@ interface Activity {
   description: string;
   latitude: number;
   longitude: number;
+  estimatedTime: string;
+  photoPath?: string;
 }
 
 interface DayPlan {

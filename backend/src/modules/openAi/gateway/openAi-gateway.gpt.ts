@@ -41,7 +41,8 @@ export class OpenIAGateway implements OpenAIInterface {
                 "name": "Nome da atividade turística",
                 "description": "Breve descrição",
                 "latitude": "Latitude da atividade",
-                "longitude": "Longitude da atividade"
+                "longitude": "Longitude da atividade",
+                "estimatedTime": "Tempo estimado que o usuario passará no local em minutos"
               }
             ]
           }
@@ -53,6 +54,7 @@ export class OpenIAGateway implements OpenAIInterface {
       - As sugestões devem ser compatíveis com o nível de gasto indicado (pouco, médio, alto).
       - Todas as latitudes e longitudes devem ser **apenas números**, sem texto.
       - Não inclua nenhuma chave extra como "data", "content" ou metadados. O JSON deve iniciar com a raiz solicitada acima.
+      - Leve em consideração a distancia entre os lugares para recomendar sempre os mais proximos no mesmo dia
       `,
           },
           {
@@ -65,7 +67,7 @@ export class OpenIAGateway implements OpenAIInterface {
 
       const jsonResponse = res.choices[0]?.message?.content;
 
-      console.log(JSON.parse(jsonResponse));
+      console.table(JSON.parse(jsonResponse));
 
       return jsonResponse ? JSON.parse(jsonResponse) : null;
     } catch (err) {

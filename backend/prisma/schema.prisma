@@ -49,14 +49,13 @@ model Plan {
   startDate     DateTime
   endDate       DateTime
   spendingLevel String
-  hosting       Boolean
+  hosting       String?
   latitude      Decimal
   longitude     Decimal
   userId        Int      @map("user_id")
 
-  user       User              @relation(fields: [userId], references: [id])
-  activities TouristActivity[]
-  TripDay    TripDay[]
+  user    User      @relation(fields: [userId], references: [id])
+  TripDay TripDay[]
 
   @@map("plans")
 }
@@ -69,9 +68,7 @@ model TouristActivity {
   latitude    Decimal
   longitude   Decimal
   photoPath   String? @map("photo_path")
-  planId      Int     @map("plan_id")
 
-  plan      Plan     @relation(fields: [planId], references: [id])
   TripDay   TripDay? @relation(fields: [tripDayId], references: [id])
   tripDayId Int?
 
@@ -79,8 +76,13 @@ model TouristActivity {
 }
 
 model TripDay {
-  id         Int               @id @default(autoincrement())
-  date       DateTime
+  id          Int      @id @default(autoincrement())
+  externalId  String   @unique @default(uuid()) @map("external_id")
+  date        DateTime
+  expense     String
+  weather     String?
+  averageTemp Decimal? @map("average_temp")
+
   planId     Int               @map("plan_id")
   plan       Plan              @relation(fields: [planId], references: [id])
   activities TouristActivity[]
