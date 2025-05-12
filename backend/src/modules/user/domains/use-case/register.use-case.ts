@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { UserGateway } from '../../gateway/user-gateway.prisma';
-import { CreateUserDto } from '../../presentation/dto/create-user.dto';
-import { User } from '@prisma/client';
-import { CreateUserOutputDto } from '../../presentation/dto/create-user-output.dto';
 import * as bcrypt from 'bcrypt';
+import { UserGateway } from '../../gateway/user-gateway.prisma';
+import { CreateUserOutputDto } from '../../presentation/dto/create-user-output.dto';
+import { CreateUserDto } from '../../presentation/dto/create-user.dto';
+import { ICreateUserOutput } from '../../presentation/output/createUser.output';
 
 @Injectable()
 export class RegisterUseCase {
@@ -23,13 +23,18 @@ export class RegisterUseCase {
 
   userMapper({
     email,
-    username,
     externalId,
-  }: Partial<User>): CreateUserOutputDto {
+    preferences,
+    username,
+  }: ICreateUserOutput): CreateUserOutputDto {
     return {
       email,
       externalId,
       username,
+      preferences: preferences.map(({ externalId, preference }) => ({
+        externalId,
+        name: preference.name,
+      })),
     };
   }
 
