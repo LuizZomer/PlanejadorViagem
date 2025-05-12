@@ -1,4 +1,6 @@
 import { Friendship } from '@prisma/client';
+import { FriendshipStatus } from '../presentation/type/enum/friendshipStatus.enum';
+import { IFriendshipWithUser } from '../presentation/type/friendshipWithUser';
 
 export class FriendshipGatewayInterface {
   sendFriendshipRequest: (
@@ -12,5 +14,8 @@ export class FriendshipGatewayInterface {
   ) => Promise<Friendship | null>;
   acceptFriendshipRequest: (requestExternalId: string) => Promise<Friendship>;
   refusedFriendshipRequest: (requestExternalId: string) => Promise<Friendship>;
-  findAllFriendshipRequest: (userId: number) => Promise<Friendship[]>;
+  findAllFriendshipRequest: (
+    userId: number,
+    status: FriendshipStatus,
+  ) => Promise<IFriendshipWithUser[]>;
 }

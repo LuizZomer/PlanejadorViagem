@@ -2,6 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/core/prisma/prisma.service';
 import { FriendshipGateway } from '../../gateway/friendship-gateway.prisma';
 import { UserService } from 'src/modules/user/domains/user.service';
+import { FriendshipStatus } from '../../presentation/type/enum/friendshipStatus.enum';
+import { Friendship } from '@prisma/client';
+import { IFindAllFriendshipOutput } from '../../presentation/output/findAllFriendshipRequest.output';
+import { IFriendshipWithUser } from '../../presentation/type/friendshipWithUser';
 
 @Injectable()
 export class FindAllFriendshipRequestUseCase {
@@ -10,13 +14,25 @@ export class FindAllFriendshipRequestUseCase {
     private readonly userService: UserService,
   ) {}
 
-  async execute(username: string) {
-    console.log(username);
-
+  async execute(username: string, status: FriendshipStatus) {
     const user = await this.userService.findOneByUsername(username);
 
-    console.log(user);
+    const allFriendshipRequest =
+      await this.friendshipGateway.findAllFriendshipRequest(user.id, status);
 
-    return this.friendshipGateway.findAllFriendshipRequest(user.id);
+    return this.allFriendshipMapper(allFriendshipRequest);
+  }
+
+  allFriendshipMapper(
+    allFriendship: IFriendshipWithUser[],
+  ): IFindAllFriendshipOutput[] {
+    return allFriendship.map(
+      ({ createdAt, externalId, status, requester }) => ({
+        createdAt,
+        externalId,
+        requester,
+        status,
+      }),
+    );
   }
 }

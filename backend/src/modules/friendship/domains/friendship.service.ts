@@ -3,6 +3,7 @@ import { SendFriendshipRequestUseCase } from './use-case/sendFriendshipRequest.u
 import { AcceptFriendshipRequestUseCase } from './use-case/acceptFriendshipRequest.use-case';
 import { RefusedFriendshipRequestUseCase } from './use-case/refusedFriendshipRequest.use-case';
 import { FindAllFriendshipRequestUseCase } from './use-case/findAllFriendshipRequest.use-case';
+import { FriendshipStatus } from '../presentation/type/enum/friendshipStatus.enum';
 
 @Injectable()
 export class FriendshipService {
@@ -31,7 +32,7 @@ export class FriendshipService {
     return this.refusedFriendshipRequestUseCase.execute(requestExternalId);
   }
 
-  async findAllFriendshipRequest(username: string) {
-    return this.findAllFriendshipRequestUseCase.execute(username);
+  async findAllFriendshipRequest(username: string, status: FriendshipStatus) {
+    return this.findAllFriendshipRequestUseCase.execute(username, status);
   }
 }

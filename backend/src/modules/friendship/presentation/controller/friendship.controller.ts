@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -14,6 +15,7 @@ import { JwtAuthGuard } from 'src/utils/guards/jwt-auth.guard';
 import { FriendshipService } from '../../domains/friendship.service';
 import { RequestWithUser } from 'src/@types/interfaces/response';
 import { SendFriendshipRequestDto } from '../dto/sendFriendshipRequest.dto';
+import { FriendshipStatus } from '../type/enum/friendshipStatus.enum';
 
 @Controller('friendship')
 export class FriendshipController {
@@ -66,11 +68,16 @@ export class FriendshipController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
   @Get()
-  async listAllFrienshipRequest(@Req() req: RequestWithUser) {
+  async listAllFrienshipRequest(
+    @Req() req: RequestWithUser,
+    @Query('status') status: FriendshipStatus,
+  ) {
     const username = req.user.username;
 
-    const requestList =
-      await this.friendshipService.findAllFriendshipRequest(username);
+    const requestList = await this.friendshipService.findAllFriendshipRequest(
+      username,
+      status,
+    );
 
     return {
       statusCode: HttpStatus.OK,

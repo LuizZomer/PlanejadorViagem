@@ -54,10 +54,19 @@ export class FriendshipGateway implements FriendshipGatewayInterface {
     });
   }
 
-  async findAllFriendshipRequest(userId: number) {
+  async findAllFriendshipRequest(userId: number, status: FriendshipStatus) {
     return this.prisma.friendship.findMany({
       where: {
         receiverId: userId,
+        status,
+      },
+      include: {
+        requester: {
+          select: {
+            externalId: true,
+            username: true,
+          },
+        },
       },
     });
   }
