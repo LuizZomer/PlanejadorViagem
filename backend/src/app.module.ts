@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
-import { UserModule } from './modules/user/user.module';
-import { AuthModule } from './modules/auth/auth.module';
-import { CityModule } from './modules/plan/plan.module';
-import { OpenAiModule } from './modules/openAi/openAi.module';
 import { CacheModule } from '@nestjs/cache-manager';
+import { Module } from '@nestjs/common';
+import { AuthModule } from './modules/auth/auth.module';
 import { FriendshipModule } from './modules/friendship/friendship.module';
+import { OpenAiModule } from './modules/openAi/openAi.module';
+import { OrganizationModule } from './modules/organization/organization.module';
+import { CityModule } from './modules/plan/plan.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { FriendshipModule } from './modules/friendship/friendship.module';
     OpenAiModule,
     FriendshipModule,
     FriendshipModule,
+    OrganizationModule,
   ],
 })
 export class AppModule {}

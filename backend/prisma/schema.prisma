@@ -17,8 +17,9 @@ model User {
 
   plans               Plan[]
   userPreferencesId   Int?
-  sentFriendships     Friendship[] @relation("SentFriendships")
-  receivedFriendships Friendship[] @relation("ReceivedFriendships")
+  sentFriendships     Friendship[]        @relation("SentFriendships")
+  receivedFriendships Friendship[]        @relation("ReceivedFriendships")
+  OrganizationUsers   OrganizationUsers[]
 
   @@map("users")
 }
@@ -33,13 +34,34 @@ model Friendship {
 
   receiver  User @relation("SentFriendships", fields: [receiverId], references: [id])
   requester User @relation("ReceivedFriendships", fields: [requesterId], references: [id])
+
+  @@map("friendships")
+}
+
+model OrganizationUsers {
+  id             Int @id @default(autoincrement())
+  organizationId Int @map("organization_id")
+  userId         Int @map("user_id")
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+  user         User         @relation(fields: [userId], references: [id])
+}
+
+model Organization {
+  id         Int      @id @default(autoincrement())
+  externalId String   @unique @default(uuid()) @map("external_id")
+  name       String
+  createdAt  DateTime @default(now())
+
+  OrganizationUsers OrganizationUsers[]
+  Plan              Plan[]
 }
 
 model UserPreferences {
   id            Int    @id @default(autoincrement())
   externalId    String @unique @default(uuid()) @map("external_id")
-  userId        Int
-  preferencesId Int
+  userId        Int    @map("user_id")
+  preferencesId Int    @map("preferences_id")
 
   preference Preferences @relation(fields: [preferencesId], references: [id])
   user       User        @relation(fields: [userId], references: [id])
@@ -55,21 +77,23 @@ model Preferences {
 }
 
 model Plan {
-  id            Int      @id @default(autoincrement())
-  externalId    String   @unique @default(uuid()) @map("external_id")
-  destination   String
-  country       String
-  description   String
-  startDate     DateTime
-  endDate       DateTime
-  spendingLevel String
-  hosting       String?
-  latitude      Decimal
-  longitude     Decimal
-  userId        Int      @map("user_id")
+  id             Int      @id @default(autoincrement())
+  externalId     String   @unique @default(uuid()) @map("external_id")
+  destination    String
+  country        String
+  description    String
+  startDate      DateTime
+  endDate        DateTime
+  spendingLevel  String
+  hosting        String?
+  latitude       Decimal
+  longitude      Decimal
+  userId         Int      @map("user_id")
+  organizationId Int?     @map("organization_id")
 
-  user    User      @relation(fields: [userId], references: [id])
-  TripDay TripDay[]
+  user         User          @relation(fields: [userId], references: [id])
+  organization Organization? @relation(fields: [organizationId], references: [id])
+  TripDay      TripDay[]
 
   @@map("plans")
 }

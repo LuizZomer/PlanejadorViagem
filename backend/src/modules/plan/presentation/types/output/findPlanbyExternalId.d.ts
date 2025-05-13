@@ -7,6 +7,6 @@ interface ITripDay extends Omit<TripDay, 'id' | 'planId'> {
 }
 
 export interface IFindPlanByExternalIdOutput
-  extends Omit<Plan, 'id' | 'userId'> {
+  extends Omit<Plan, 'id' | 'userId' | 'organizationId'> {
   tripDay: ITripDay[];
 }

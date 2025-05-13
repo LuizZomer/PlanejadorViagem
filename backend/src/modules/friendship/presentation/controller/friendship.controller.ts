@@ -11,9 +11,9 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { RequestWithUser } from 'src/@types/interfaces/response';
 import { JwtAuthGuard } from 'src/utils/guards/jwt-auth.guard';
 import { FriendshipService } from '../../domains/friendship.service';
-import { RequestWithUser } from 'src/@types/interfaces/response';
 import { SendFriendshipRequestDto } from '../dto/sendFriendshipRequest.dto';
 import { FriendshipStatus } from '../type/enum/friendshipStatus.enum';
 
