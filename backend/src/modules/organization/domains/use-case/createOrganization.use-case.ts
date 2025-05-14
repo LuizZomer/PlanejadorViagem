@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserService } from 'src/modules/user/domains/user.service';
 import { OrganizationGateway } from '../../gateway/organizationGateway.prisma';
 import { CreateOrganizationDto } from '../../presentation/dto/createOrganization.dto';
@@ -10,22 +10,23 @@ export class CreateOrganizationUseCase {
     private readonly userService: UserService,
   ) {}
 
-  async execute(organizationData: CreateOrganizationDto) {
-    let usersId: number[];
-    if (
-      organizationData.usersExternalId &&
-      organizationData.usersExternalId.length === 0
-    ) {
-      usersId = await Promise.all(
-        organizationData.usersExternalId.map(
-          async (externalId) =>
-            (await this.userService.findOneByExternalId(externalId)).id,
-        ),
-      );
-    }
+  async execute(organizationData: CreateOrganizationDto, externalId: string) {
+    const [usersId, owner] = await Promise.all([
+      Promise.all(
+        organizationData.usersExternalId.map(async (externalId) => {
+          const user = await this.userService.findOneByExternalId(externalId);
 
-    console.log(usersId);
+          if (!user) {
+            throw new BadRequestException('External id não encontrado!');
+          }
 
-    // return this.organizationGateway.create(organizationData);
+          return user.id;
+        }),
+      ),
+
+      this.userService.findOneByExternalId(externalId),
+    ]);
+
+    return this.organizationGateway.create(organizationData, usersId, owner.id);
   }
 }

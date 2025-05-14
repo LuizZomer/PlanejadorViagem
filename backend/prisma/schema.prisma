@@ -8,18 +8,19 @@ generator client {
 }
 
 model User {
-  id          Int               @id @default(autoincrement())
-  externalId  String            @unique @default(uuid()) @map("external_id")
-  username    String            @unique
-  email       String            @unique
-  password    String
-  preferences UserPreferences[]
+  id         Int    @id @default(autoincrement())
+  externalId String @unique @default(uuid()) @map("external_id")
+  username   String @unique
+  email      String @unique
+  password   String
 
+  preferences         UserPreferences[]
   plans               Plan[]
   userPreferencesId   Int?
   sentFriendships     Friendship[]        @relation("SentFriendships")
   receivedFriendships Friendship[]        @relation("ReceivedFriendships")
   OrganizationUsers   OrganizationUsers[]
+  Organization        Organization[]
 
   @@map("users")
 }
@@ -52,9 +53,11 @@ model Organization {
   externalId String   @unique @default(uuid()) @map("external_id")
   name       String
   createdAt  DateTime @default(now())
+  ownerId    Int      @map("owner_id")
 
-  OrganizationUsers OrganizationUsers[]
-  Plan              Plan[]
+  owner             User?               @relation(fields: [ownerId], references: [id])
+  organizationUsers OrganizationUsers[]
+  plan              Plan[]
 }
 
 model UserPreferences {

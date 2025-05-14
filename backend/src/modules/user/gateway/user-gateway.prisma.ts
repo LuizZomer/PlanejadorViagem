@@ -39,6 +39,8 @@ export class UserGateway implements UserGatewayInterface {
   }
 
   async findOneByExternalId(externalId: string): Promise<User | null> {
+    console.log(externalId);
+
     return this.prisma.user.findUnique({
       where: {
         externalId,
