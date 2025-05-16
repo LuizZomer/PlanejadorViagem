@@ -14,7 +14,7 @@ model User {
   email      String @unique
   password   String
 
-  preferences         UserPreferences[]
+  userPreferences     UserPreferences[]
   plans               Plan[]
   userPreferencesId   Int?
   sentFriendships     Friendship[]        @relation("SentFriendships")
@@ -40,12 +40,14 @@ model Friendship {
 }
 
 model OrganizationUsers {
-  id             Int @id @default(autoincrement())
   organizationId Int @map("organization_id")
   userId         Int @map("user_id")
 
   organization Organization @relation(fields: [organizationId], references: [id])
   user         User         @relation(fields: [userId], references: [id])
+
+  @@id(name: "organizationUsersId", [userId, organizationId])
+  @@map("organization_users")
 }
 
 model Organization {
@@ -61,14 +63,13 @@ model Organization {
 }
 
 model UserPreferences {
-  id            Int    @id @default(autoincrement())
-  externalId    String @unique @default(uuid()) @map("external_id")
-  userId        Int    @map("user_id")
-  preferencesId Int    @map("preferences_id")
+  userId        Int @map("user_id")
+  preferencesId Int @map("preferences_id")
 
   preference Preferences @relation(fields: [preferencesId], references: [id])
   user       User        @relation(fields: [userId], references: [id])
 
+  @@id(name: "userPreferencesId", [userId, preferencesId])
   @@map("user_preferences")
 }
 

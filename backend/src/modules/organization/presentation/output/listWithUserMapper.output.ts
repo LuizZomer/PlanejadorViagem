@@ -1,6 +1,6 @@
 import { Organization, OrganizationUsers, User } from '@prisma/client';
 
-interface IOrganizationUsers extends Pick<OrganizationUsers, 'id'> {
+interface IOrganizationUsers extends Pick<OrganizationUsers, 'organizationId'> {
   user: Pick<User, 'externalId' | 'username'>;
 }
 

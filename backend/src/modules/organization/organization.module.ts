@@ -6,6 +6,9 @@ import { CreateOrganizationUseCase } from './domains/use-case/createOrganization
 import { OrganizationGateway } from './gateway/organizationGateway.prisma';
 import { OrganizationController } from './presentation/controllers/organization.controller';
 import { ListAllWithUsersUseCase } from './domains/use-case/listAllWithUsers.use-case';
+import { FindByExternalIdUseCase } from './domains/use-case/findByExternalId.use-case';
+import { FindByExternalIdWithPlanUseCase } from './domains/use-case/findByExternalIdWithPlan.use-case';
+import { ChangeUserOrganizationUseCase } from './domains/use-case/changeUserOrganization.use-case';
 
 @Module({
   imports: [UserModule],
@@ -16,6 +19,10 @@ import { ListAllWithUsersUseCase } from './domains/use-case/listAllWithUsers.use
     CreateOrganizationUseCase,
     OrganizationGateway,
     ListAllWithUsersUseCase,
+    FindByExternalIdUseCase,
+    FindByExternalIdWithPlanUseCase,
+    ChangeUserOrganizationUseCase,
   ],
+  exports: [OrganizationService],
 })
 export class OrganizationModule {}

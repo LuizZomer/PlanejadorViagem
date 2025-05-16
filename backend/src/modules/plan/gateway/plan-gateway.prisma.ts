@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/core/prisma/prisma.service';
 import { CreatePlanDto } from '../presentation/dto/create-plan.dto';
 import { PlanGatewayInterface } from './plan-gateway.interface';
-import { ICityWithPlaces } from '../presentation/types/cityWithPlaces';
 import { Plan } from '@prisma/client';
 import { IPlanOutput } from '../presentation/types/output/plan.output';
 
@@ -12,25 +11,6 @@ export class PlanGateway implements PlanGatewayInterface {
 
   async findAllPlans(userId: number): Promise<Plan[]> {
     return this.prisma.plan.findMany({ where: { userId } });
-  }
-
-  async findCityAndPlaceByExternalId(cityId: number) {
-    ///return this.prisma.city.findUnique({
-    // where: {
-    //   id: cityId,
-    // },
-    //include: {
-    //Place: {
-    //select: {
-    //externalId: true,
-    // description: true,
-    /// latitude: true,
-    // longitude: true,
-    //name: true,
-    //},
-    // },
-    //},
-    //});
   }
 
   async createPlan(
@@ -110,6 +90,20 @@ export class PlanGateway implements PlanGatewayInterface {
             activities: true,
           },
         },
+      },
+    });
+  }
+
+  async changePlanOrganization(
+    organizationId: number | null,
+    planExternalId: string,
+  ): Promise<Plan> {
+    return this.prisma.plan.update({
+      data: {
+        organizationId: organizationId,
+      },
+      where: {
+        externalId: planExternalId,
       },
     });
   }

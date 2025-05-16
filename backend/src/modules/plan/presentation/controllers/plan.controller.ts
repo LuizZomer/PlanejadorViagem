@@ -7,6 +7,8 @@ import {
   HttpStatus,
   Inject,
   Param,
+  ParseIntPipe,
+  Patch,
   Post,
   Req,
   UseGuards,
@@ -78,6 +80,27 @@ export class PlanController {
     return {
       statusCode: HttpStatus.CREATED,
       content: { newPlan },
+    };
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  @Patch(':planExternalId/:organizationExternalId')
+  async changePlanOrganization(
+    @Param('organizationExternalId')
+    organizationExternalId: string,
+    @Param('planExternalId') planExternalId: string,
+  ) {
+    console.log(planExternalId);
+
+    const plan = await this.planService.changePlanOrganization(
+      organizationExternalId,
+      planExternalId,
+    );
+
+    return {
+      statusCode: HttpStatus.OK,
+      content: { plan },
     };
   }
 }

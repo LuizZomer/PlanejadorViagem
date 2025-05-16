@@ -26,13 +26,15 @@ export class ListAllWithUsersUseCase {
         createdAt,
         externalId,
         name,
-        organizationUsers: organizationUsers.map(({ id, user }) => ({
-          id,
-          user: {
-            externalId: user.externalId,
-            username: user.username,
-          },
-        })),
+        organizationUsers: organizationUsers.map(
+          ({ organizationId, user }) => ({
+            organizationId,
+            user: {
+              externalId: user.externalId,
+              username: user.username,
+            },
+          }),
+        ),
       }),
     );
   }

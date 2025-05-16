@@ -1,8 +1,20 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { JwtAuthGuard } from 'src/utils/guards/jwt-auth.guard';
 import { OrganizationService } from '../../domains/organization.service';
 import { CreateOrganizationDto } from '../dto/createOrganization.dto';
 import { RequestWithUser } from 'src/@types/interfaces/response';
+import { ChangeUserOrganization } from '../dto/changeUserOrganization.dto';
 
 @Controller('organization')
 export class OrganizationController {
@@ -24,5 +36,32 @@ export class OrganizationController {
     const externalId = req.user.externalId;
 
     return this.organizationService.listOrganizationWithUsers(externalId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get(':organizationExternalId')
+  async findByExternalIdWithPlan(
+    @Param('organizationExternalId') organizationExternalId: string,
+  ) {
+    return this.organizationService.findByExternalIdWithPlan(
+      organizationExternalId,
+    );
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  @Patch('members')
+  async changeUserOrganization(
+    @Body() { organizationExternalId, usersExternalId }: ChangeUserOrganization,
+  ) {
+    await this.organizationService.changeUserOrganization(
+      organizationExternalId,
+      usersExternalId,
+    );
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Membros atualizados com sucesso!',
+    };
   }
 }

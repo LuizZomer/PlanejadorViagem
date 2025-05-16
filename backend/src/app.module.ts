@@ -4,7 +4,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { FriendshipModule } from './modules/friendship/friendship.module';
 import { OpenAiModule } from './modules/openAi/openAi.module';
 import { OrganizationModule } from './modules/organization/organization.module';
-import { CityModule } from './modules/plan/plan.module';
+import { PlanModule } from './modules/plan/plan.module';
 import { UserModule } from './modules/user/user.module';
 
 @Module({
@@ -15,7 +15,7 @@ import { UserModule } from './modules/user/user.module';
     }),
     UserModule,
     AuthModule,
-    CityModule,
+    PlanModule,
     OpenAiModule,
     FriendshipModule,
     FriendshipModule,

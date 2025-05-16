@@ -5,5 +5,5 @@ interface IUserPreferences extends UserPreferences {
 }
 
 export interface ICreateUserOutput extends User {
-  preferences: IUserPreferences[];
+  userPreferences: IUserPreferences[];
 }

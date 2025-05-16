@@ -7,9 +7,11 @@ import { PlanController } from './presentation/controllers/plan.controller';
 import { CreatePlanWithDaysUseCase } from './domains/use-case/create-plan-with-days.use-case';
 import { UserModule } from '../user/user.module';
 import { GetCityByExternalId } from './domains/use-case/get-city-by-external-id.use-case';
+import { ChangePlanOrganizationUseCase } from './domains/use-case/change-plan-organization.use-case';
+import { OrganizationModule } from '../organization/organization.module';
 
 @Module({
-  imports: [UserModule],
+  imports: [UserModule, OrganizationModule],
   controllers: [PlanController],
   providers: [
     PlanService,
@@ -19,7 +21,8 @@ import { GetCityByExternalId } from './domains/use-case/get-city-by-external-id.
     // GetAllCitiesUseCase,
     CreatePlanWithDaysUseCase,
     GetCityByExternalId,
+    ChangePlanOrganizationUseCase,
   ],
   exports: [PlanService],
 })
-export class CityModule {}
+export class PlanModule {}

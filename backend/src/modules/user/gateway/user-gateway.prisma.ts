@@ -14,14 +14,14 @@ export class UserGateway implements UserGatewayInterface {
     return this.prisma.user.create({
       data: {
         ...rest,
-        preferences: {
+        userPreferences: {
           createMany: {
             data: preferences.map((id) => ({ preferencesId: id })),
           },
         },
       },
       include: {
-        preferences: {
+        userPreferences: {
           include: {
             preference: true,
           },
