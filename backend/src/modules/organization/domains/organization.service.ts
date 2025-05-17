@@ -5,6 +5,7 @@ import { ListAllWithUsersUseCase } from './use-case/listAllWithUsers.use-case';
 import { FindByExternalIdUseCase } from './use-case/findByExternalId.use-case';
 import { FindByExternalIdWithPlanUseCase } from './use-case/findByExternalIdWithPlan.use-case';
 import { ChangeUserOrganizationUseCase } from './use-case/changeUserOrganization.use-case';
+import { DeleteOrganizationUseCase } from './use-case/deleteOrganization.use-case';
 
 @Injectable()
 export class OrganizationService {
@@ -14,6 +15,7 @@ export class OrganizationService {
     private readonly findByExternalIdUseCase: FindByExternalIdUseCase,
     private readonly findByExternalIdWithPlanUseCase: FindByExternalIdWithPlanUseCase,
     private readonly changeUserOrganizationUseCase: ChangeUserOrganizationUseCase,
+    private readonly deleteOrganizationUseCase: DeleteOrganizationUseCase,
   ) {}
 
   async createOrganzation(
@@ -43,5 +45,9 @@ export class OrganizationService {
       organizationExternalId,
       usersExternalId,
     );
+  }
+
+  async deleteOrganization(organizationExternalId: string) {
+    return this.deleteOrganizationUseCase.execute(organizationExternalId);
   }
 }

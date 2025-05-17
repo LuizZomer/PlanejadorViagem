@@ -18,4 +18,5 @@ export class OrganizationGatewayInterface {
     organizationId: number,
     usersId: number[],
   ) => Promise<void>;
+  deleteOrganization: (orgId: number) => Promise<Organization>;
 }

@@ -1,12 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { openAi } from 'src/core/openAi/openAi';
-import { OpenIAGateway } from '../../gateway/openAi-gateway.gpt';
+import { OpenIAGateway } from '../../gateway/openAi/openAi-gateway.gpt';
 import { GetPlanByCity } from '../../presentation/dto/get-plan-by-city.dto';
 import axios from 'axios';
+import { OpenAiAxiosGateway } from '../../gateway/axios/openAi-axios-gateway.axios';
 
 @Injectable()
 export class SearchPlanByCityUseCase {
-  constructor(private readonly openIAGateway: OpenIAGateway) {}
+  constructor(
+    private readonly openIAGateway: OpenIAGateway,
+    private readonly openAiAxiosGateway: OpenAiAxiosGateway,
+  ) {}
 
   public async execute(planData: GetPlanByCity) {
     const plan = await this.openIAGateway.searchPlanByCity(planData);
@@ -47,13 +51,11 @@ export class SearchPlanByCityUseCase {
   }
 
   private async addWeather(dayPlan: DayPlan[]): Promise<DayPlan[]> {
-    const weather = await axios.get<WeatherForecastResponse>(
-      `https://api.openweathermap.org/data/2.5/forecast?q=paris&appid=${process.env.weatherApiKey}&lang=pt&units=metric`,
-    );
+    const weather = await this.openAiAxiosGateway.getTodayWeather();
 
     // console.log(weather);
 
-    const forecastList = weather.data.list;
+    const forecastList = weather.list;
 
     const newDayWithWeather = dayPlan.map((day) => {
       // Filtra todas as previsões da data do dayPlan
@@ -113,19 +115,7 @@ export class SearchPlanByCityUseCase {
     const query = `${this.formatForSearch(activityName)}+${this.formatForSearch(destination)}`;
 
     try {
-      const res = await axios.get(
-        `https://www.googleapis.com/customsearch/v1`,
-        {
-          params: {
-            key: process.env.googleApi,
-            cx: process.env.googleCx,
-            q: query,
-            searchType: 'image',
-          },
-        },
-      );
-
-      const items = res.data.items || [];
+      const items = await this.openAiAxiosGateway.getGoogleImages(query);
       const validItem = items.find((item) => this.isAllowedImage(item.link));
 
       return validItem?.link || '';

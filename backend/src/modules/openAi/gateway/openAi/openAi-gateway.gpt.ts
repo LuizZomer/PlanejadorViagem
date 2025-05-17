@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { OpenAIInterface } from './openAi-gateway.interface';
-import { openAi } from 'src/core/openAi/openAi';
-import { ISearchPlaceByCityOutput } from 'src/@types/interfaces/outputs/searchPlaceByCityOutput';
 import { ISuggestCitiesByDescriptionOutput } from 'src/@types/interfaces/outputs/suggestCitiesByDescriptionOutput';
-import { GetPlanByCity } from '../presentation/dto/get-plan-by-city.dto';
+import { openAi } from 'src/core/openAi/openAi';
+import { GetPlanByCity } from '../../presentation/dto/get-plan-by-city.dto';
+import { OpenAIInterface } from './openAi-gateway.interface';
 
 @Injectable()
 export class OpenIAGateway implements OpenAIInterface {

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -62,6 +63,22 @@ export class OrganizationController {
     return {
       statusCode: HttpStatus.OK,
       message: 'Membros atualizados com sucesso!',
+    };
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  @Delete(':organizationExternalId')
+  async deleteOrganization(
+    @Param('organizationExternalId') organizationExternalId: string,
+  ) {
+    const org = await this.organizationService.deleteOrganization(
+      organizationExternalId,
+    );
+
+    return {
+      statusCode: HttpStatus.OK,
+      content: org,
     };
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { OpenIAGateway } from '../../gateway/openAi-gateway.gpt';
+import { OpenIAGateway } from '../../gateway/openAi/openAi-gateway.gpt';
 
 @Injectable()
 export class SuggestCitiesByDescriptionUseCase {

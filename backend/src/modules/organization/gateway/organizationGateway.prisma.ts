@@ -125,4 +125,18 @@ export class OrganizationGateway implements OrganizationGatewayInterface {
       );
     });
   }
+
+  async deleteOrganization(orgId: number): Promise<Organization> {
+    try {
+      const org = await this.prisma.organization.delete({
+        where: {
+          id: orgId,
+        },
+      });
+
+      return org;
+    } catch (e) {
+      console.log(e);
+    }
+  }
 }

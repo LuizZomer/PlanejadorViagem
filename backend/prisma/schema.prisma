@@ -8,15 +8,15 @@ generator client {
 }
 
 model User {
-  id         Int    @id @default(autoincrement())
-  externalId String @unique @default(uuid()) @map("external_id")
-  username   String @unique
-  email      String @unique
-  password   String
+  id                Int    @id @default(autoincrement())
+  externalId        String @unique @default(uuid()) @map("external_id")
+  username          String @unique
+  email             String @unique
+  password          String
+  userPreferencesId Int?
 
   userPreferences     UserPreferences[]
   plans               Plan[]
-  userPreferencesId   Int?
   sentFriendships     Friendship[]        @relation("SentFriendships")
   receivedFriendships Friendship[]        @relation("ReceivedFriendships")
   OrganizationUsers   OrganizationUsers[]
@@ -43,7 +43,7 @@ model OrganizationUsers {
   organizationId Int @map("organization_id")
   userId         Int @map("user_id")
 
-  organization Organization @relation(fields: [organizationId], references: [id])
+  organization Organization @relation("Organization", fields: [organizationId], references: [id], onDelete: Cascade)
   user         User         @relation(fields: [userId], references: [id])
 
   @@id(name: "organizationUsersId", [userId, organizationId])
@@ -55,11 +55,11 @@ model Organization {
   externalId String   @unique @default(uuid()) @map("external_id")
   name       String
   createdAt  DateTime @default(now())
-  ownerId    Int      @map("owner_id")
+  ownerId    Int?     @map("owner_id")
 
-  owner             User?               @relation(fields: [ownerId], references: [id])
-  organizationUsers OrganizationUsers[]
-  plan              Plan[]
+  owner             User?               @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+  organizationUsers OrganizationUsers[] @relation("Organization")
+  plan              Plan[]              @relation("OrganizationPlan")
 }
 
 model UserPreferences {
@@ -96,8 +96,8 @@ model Plan {
   organizationId Int?     @map("organization_id")
 
   user         User          @relation(fields: [userId], references: [id])
-  organization Organization? @relation(fields: [organizationId], references: [id])
   TripDay      TripDay[]
+  organization Organization? @relation("OrganizationPlan", fields: [organizationId], references: [id], onDelete: SetNull)
 
   @@map("plans")
 }

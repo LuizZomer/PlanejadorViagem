@@ -9,6 +9,7 @@ import { ListAllWithUsersUseCase } from './domains/use-case/listAllWithUsers.use
 import { FindByExternalIdUseCase } from './domains/use-case/findByExternalId.use-case';
 import { FindByExternalIdWithPlanUseCase } from './domains/use-case/findByExternalIdWithPlan.use-case';
 import { ChangeUserOrganizationUseCase } from './domains/use-case/changeUserOrganization.use-case';
+import { DeleteOrganizationUseCase } from './domains/use-case/deleteOrganization.use-case';
 
 @Module({
   imports: [UserModule],
@@ -22,6 +23,7 @@ import { ChangeUserOrganizationUseCase } from './domains/use-case/changeUserOrga
     FindByExternalIdUseCase,
     FindByExternalIdWithPlanUseCase,
     ChangeUserOrganizationUseCase,
+    DeleteOrganizationUseCase,
   ],
   exports: [OrganizationService],
 })
