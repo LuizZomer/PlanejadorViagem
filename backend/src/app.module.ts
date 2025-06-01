@@ -6,6 +6,7 @@ import { OpenAiModule } from './modules/openAi/openAi.module';
 import { OrganizationModule } from './modules/organization/organization.module';
 import { PlanModule } from './modules/plan/plan.module';
 import { UserModule } from './modules/user/user.module';
+import { PreferenceModule } from './modules/preference/preference.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { UserModule } from './modules/user/user.module';
     FriendshipModule,
     FriendshipModule,
     OrganizationModule,
+    PreferenceModule,
   ],
 })
 export class AppModule {}
