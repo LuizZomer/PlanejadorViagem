@@ -38,6 +38,20 @@ export const SignInText = styled.Text`
     margin: 10px 60px 10px 65px;
   `; */
 
+export const PreferencesFormContainer = styled.View`
+  display: flex;
+  gap: 10px;
+  padding: 0 70px;
+`;
+
+export const PreferencesContainer = styled.View`
+  display: flex;
+  flex-direction: row;
+  gap: 3px;
+  flex-wrap: wrap;
+  width: 100%;
+`;
+
 export const FooterText = styled.Text`
   text-align: center;
   font-size: 15px;

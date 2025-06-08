@@ -25,6 +25,7 @@ export const authStore = create<IAuthStore>((set) => ({
     set({ user, isAuthenticated: true });
   },
   logout: () => {
+    AsyncStorage.removeItem("token");
     set({ user: null, isAuthenticated: false });
   },
   initializeAuth: async (): Promise<void> => {

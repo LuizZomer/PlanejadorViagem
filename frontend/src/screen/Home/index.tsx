@@ -1,8 +1,8 @@
 import React from "react";
-import { StatusBar } from "react-native";
+import { StatusBar, View } from "react-native";
 import { authStore } from "../../shared/stores/auth/authStore";
 import { Text } from "@rneui/base";
-import { Card, Icon } from "@rneui/themed";
+import { Button, Card, Icon } from "@rneui/themed";
 import { InformCityTab } from "../../shared/components/Pages/Home/InformCityTab";
 import { useQuery } from "@tanstack/react-query";
 import { getCities } from "../../services/city/get-cities";
@@ -13,6 +13,7 @@ import * as S from "./styles";
 
 export const Home = () => {
   const user = authStore((store) => store.user);
+
   const [selectedOption, setSelectedOption] = React.useState<
     "inform" | "suggest"
   >("inform");
@@ -27,7 +28,6 @@ export const Home = () => {
   return (
     <S.Screen>
       <StatusBar barStyle="light-content" backgroundColor="#00BFFF" />
-
       <S.TopBar>
         <Icon name="home" type="material" color="#fff" size={28} />
         <S.TopBarTitle>Bem-vindo, {user?.username}</S.TopBarTitle>
@@ -70,7 +70,10 @@ export const Home = () => {
         ) : (
           <S.CardsContainer>
             {data.map(({ country, description, externalId, name }) => (
-              <S.Card key={externalId} onPress={() => navigate.navigate("CityDetails", { externalId })}>
+              <S.Card
+                key={externalId}
+                onPress={() => navigate.navigate("CityDetails", { externalId })}
+              >
                 <S.CardTitle>{name}</S.CardTitle>
                 <S.CardCountry>{country}</S.CardCountry>
                 <S.CardDescription>{description}</S.CardDescription>

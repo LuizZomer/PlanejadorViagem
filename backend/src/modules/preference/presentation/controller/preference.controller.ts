@@ -6,7 +6,6 @@ import { JwtAuthGuard } from 'src/utils/guards/jwt-auth.guard';
 export class PreferenceController {
   constructor(private readonly preferenceService: PreferenceService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Get()
   async findAll() {
     return this.preferenceService.findAll();
