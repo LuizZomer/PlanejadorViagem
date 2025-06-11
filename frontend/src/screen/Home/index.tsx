@@ -1,15 +1,15 @@
 import React from "react";
-import { StatusBar, View } from "react-native";
+import { StatusBar, Touchable, TouchableOpacity } from "react-native";
 import { authStore } from "../../shared/stores/auth/authStore";
-import { Text } from "@rneui/base";
-import { Button, Card, Icon } from "@rneui/themed";
+import { Icon } from "@rneui/themed";
 import { InformCityTab } from "../../shared/components/Pages/Home/InformCityTab";
 import { useQuery } from "@tanstack/react-query";
-import { getCities } from "../../services/city/get-cities";
+import { getPlans } from "../../services/city/get-plans";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationRoutesProp } from "../../shared/types/navigation/navigate";
 import { SuggestCityTab } from "../../shared/components/Pages/Home/SuggestCityTab";
 import * as S from "./styles";
+import { formatDate } from "../../shared/utils/formatDate";
 
 export const Home = () => {
   const user = authStore((store) => store.user);
@@ -19,9 +19,9 @@ export const Home = () => {
   >("inform");
   const navigate = useNavigation<NavigationRoutesProp>();
 
-  const { data = [], isLoading } = useQuery({
+  const { data: plans = [], isLoading } = useQuery({
     queryKey: ["get-cities"],
-    queryFn: async () => getCities(),
+    queryFn: async () => getPlans(),
     staleTime: 1000 * 60 * 5,
   });
 
@@ -69,15 +69,35 @@ export const Home = () => {
           <S.Loading>Carregando cidades...</S.Loading>
         ) : (
           <S.CardsContainer>
-            {data.map(({ country, description, externalId, name }) => (
-              <S.Card
-                key={externalId}
-                onPress={() => navigate.navigate("CityDetails", { externalId })}
+            {plans.length === 0 && (
+              <S.EmptyText>Nenhum planejamento salvo.</S.EmptyText>
+            )}
+            {plans.map((plan) => (
+              <TouchableOpacity
+                key={plan.externalId}
+                onPress={() =>
+                  navigate.navigate("CityDetails", {
+                    externalId: plan.externalId,
+                  })
+                }
               >
-                <S.CardTitle>{name}</S.CardTitle>
-                <S.CardCountry>{country}</S.CardCountry>
-                <S.CardDescription>{description}</S.CardDescription>
-              </S.Card>
+                <S.PlanCard>
+                  <S.PlanTitle>
+                    {plan.destination} - {plan.country}
+                  </S.PlanTitle>
+                  <S.PlanDescription>{plan.description}</S.PlanDescription>
+                  <S.PlanInfo>
+                    <S.PlanInfoText>
+                      Período: {formatDate(plan.startDate)} até{" "}
+                      {formatDate(plan.endDate)}
+                    </S.PlanInfoText>
+                    <S.PlanInfoText>Hospedagem: {plan.hosting}</S.PlanInfoText>
+                    <S.PlanInfoText>
+                      Nível de gasto: {plan.spendingLevel}
+                    </S.PlanInfoText>
+                  </S.PlanInfo>
+                </S.PlanCard>
+              </TouchableOpacity>
             ))}
           </S.CardsContainer>
         )}

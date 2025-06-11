@@ -3,19 +3,28 @@ import { api } from "../axios";
 interface IFindPlaceById {
   country: string;
   spendingLevel: string;
-  city: string;
+  destination: string;
+  startDate: string;
+  endDate: string;
+  hosting: boolean;
 }
 
 export const findPlaceByCity = async ({
-  city,
+  destination,
   country,
   spendingLevel,
+  startDate,
+  endDate,
+  hosting,
 }: IFindPlaceById): Promise<IFindPlaceByCityOutput> => {
   const res = await api.get("/ia/places", {
     params: {
       spendingLevel,
       country,
-      city,
+      destination,
+      startDate,
+      endDate,
+      hosting,
     },
   });
 

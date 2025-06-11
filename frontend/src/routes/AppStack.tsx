@@ -26,13 +26,41 @@ export const AppStack = () => {
       // screenOptions={{  }}
       initialRouteName="Home"
     >
-      <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="InformCity" component={ChooseCity} />
-      <Stack.Screen name="SuggestCity" component={SuggestCities} />
-      <Stack.Screen name="PlaceList" component={PlacesList} />
-      <Stack.Screen name="Profile" component={Profile} />
-      <Stack.Screen name="CityList" component={CityList} />
-      <Stack.Screen name="CityDetails" component={CityDetails} />
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        options={{ title: "Início" }}
+      />
+      <Stack.Screen
+        name="InformCity"
+        component={ChooseCity}
+        options={{ title: "Informar Cidade" }}
+      />
+      <Stack.Screen
+        name="SuggestCity"
+        component={SuggestCities}
+        options={{ title: "Pedir Sugestão" }}
+      />
+      <Stack.Screen
+        name="PlaceList"
+        component={PlacesList}
+        options={{ title: "Roteiro Gerado" }}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
+        options={{ title: "Perfil" }}
+      />
+      <Stack.Screen
+        name="CityList"
+        component={CityList}
+        options={{ title: "Sugestões de Cidades" }}
+      />
+      <Stack.Screen
+        name="CityDetails"
+        component={CityDetails}
+        options={{ title: "Detalhes do Planejamento" }}
+      />
     </Stack.Navigator>
   );
 };

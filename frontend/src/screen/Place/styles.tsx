@@ -113,3 +113,43 @@ export const SaveButton = styled(Button).attrs({
     fontWeight: "bold",
   },
 })``;
+
+export const SectionTitle = styled.Text`
+  font-size: 18px;
+  font-weight: bold;
+  color: #005fa3;
+  margin-top: 18px;
+  margin-bottom: 8px;
+`;
+
+export const ActivityContainer = styled.View`
+  flex-direction: row;
+  align-items: flex-start;
+  margin-bottom: 12px;
+`;
+
+export const ActivityImage = styled.Image`
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  margin-right: 12px;
+  background-color: #eaeaea;
+`;
+
+export const ActivityTitle = styled.Text`
+  font-size: 16px;
+  font-weight: bold;
+  color: #222;
+  margin-bottom: 2px;
+`;
+
+export const ActivityDescription = styled.Text`
+  font-size: 14px;
+  color: #555;
+`;
+
+export const ActivityTime = styled.Text`
+  font-size: 13px;
+  color: #888;
+  margin-left: 2px;
+`;

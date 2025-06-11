@@ -1,69 +1,95 @@
-import { useQuery } from "@tanstack/react-query"
-import { ScrollView, View } from "react-native"
-import { cityDetails } from "../../services/city/city-details"
-import { Text } from "@rneui/themed"
-import { RouteProp, useRoute } from "@react-navigation/native"
-import { TRootStackParamList } from "../../routes/AppStack"
-import * as S from './styles'
-import { Marker } from "react-native-maps"
+import { useQuery } from "@tanstack/react-query";
+import { ScrollView, View, Text } from "react-native";
+import { planDetails } from "../../services/city/plan-details";
+import { RouteProp, useRoute } from "@react-navigation/native";
+import { TRootStackParamList } from "../../routes/AppStack";
+import * as S from "./styles";
+import { Marker } from "react-native-maps";
+import { formatDate } from "../../shared/utils/formatDate";
 
 export const CityDetails = () => {
-    const route = useRoute<RouteProp<TRootStackParamList, "CityDetails">>();
-    
-    const {data, isLoading} = useQuery({
-        queryKey: ['city-details', route.params.externalId],
-        queryFn: async() => cityDetails(route.params.externalId),
-        staleTime: 1000 * 60 * 5,
-    })
+  const route = useRoute<RouteProp<TRootStackParamList, "CityDetails">>();
+
+  const { data: plan, isLoading } = useQuery({
+    queryKey: ["city-details", route.params.externalId],
+    queryFn: async () => planDetails(route.params.externalId),
+    staleTime: 1000 * 60 * 5,
+  });
+
+  if (isLoading) {
+    return <S.Loading>Carregando detalhes...</S.Loading>;
+  }
+  if (!plan) {
+    return <S.Loading>Plano não encontrado.</S.Loading>;
+  }
 
   return (
-    <ScrollView>
-        {isLoading && <Text>Carregando...</Text>}
-        {!isLoading && data && (
-            <S.Container>
-            <S.Header>
-              <S.Title style={{ color: "#00BFFF" }}>Pontos turísticos {data.name}</S.Title>
-              <S.Subtitle>País: {data.country}</S.Subtitle>
-      
-              <S.DescriptionBox>
-                <S.DescriptionText>
-                  {data.description}. {data.spendingLevel.toUpperCase()}
-                </S.DescriptionText>
-              </S.DescriptionBox>
-            </S.Header>
-      
-            {data.Place.map(({ name, description }) => (
-              <S.PlaceCard key={name}>
-                <S.PlaceTitle style={{ color: "#00BFFF" }}>{name}</S.PlaceTitle>
-                <S.PlaceDescription>{description}</S.PlaceDescription>
-              </S.PlaceCard>
+    <S.Container>
+      <ScrollView>
+        <S.Title>
+          {plan.destination} - {plan.country}
+        </S.Title>
+        <S.Subtitle>
+          Período: {formatDate(plan.startDate)} até {formatDate(plan.endDate)}
+        </S.Subtitle>
+        <S.Subtitle>Hospedagem: {plan.hosting}</S.Subtitle>
+        <S.Subtitle>Nível de gasto: {plan.spendingLevel}</S.Subtitle>
+        <S.DescriptionBox>
+          <S.DescriptionText>{plan.description}</S.DescriptionText>
+        </S.DescriptionBox>
+
+        {plan.tripDay.map((day, idx) => (
+          <S.DayCard key={day.externalId}>
+            <S.DayTitle>
+              Dia {idx + 1} - {formatDate(day.date)}
+            </S.DayTitle>
+            <S.DayInfo>
+              Clima: {day.weather} | Temperatura média: {day.averageTemp}°C |
+              Gasto: R$ {day.expense}
+            </S.DayInfo>
+            {day.activities.map((activity) => (
+              <S.ActivityCard key={activity.externalId}>
+                <S.ActivityImage source={{ uri: activity.photoPath }} />
+                <View style={{ flex: 1 }}>
+                  <S.ActivityName>{activity.name}</S.ActivityName>
+                  <S.ActivityDescription>
+                    {activity.description}
+                  </S.ActivityDescription>
+                  <S.ActivityCoords>
+                    Lat: {activity.latitude} | Long: {activity.longitude}
+                  </S.ActivityCoords>
+                </View>
+              </S.ActivityCard>
             ))}
-      
             <S.MapContainer>
               <S.StyledMap
                 initialRegion={{
-                  latitude: Number(data.latitude),
-                  longitude: Number(data.longitude),
-                  latitudeDelta: 0.01,
-                  longitudeDelta: 0.01,
+                  latitude: Number(
+                    day.activities[0]?.latitude || plan.latitude
+                  ),
+                  longitude: Number(
+                    day.activities[0]?.longitude || plan.longitude
+                  ),
+                  latitudeDelta: 0.05,
+                  longitudeDelta: 0.05,
                 }}
               >
-                {data.Place.map(({ description, latitude, longitude, name }) => (
+                {day.activities.map((activity) => (
                   <Marker
-                    key={name}
+                    key={activity.externalId}
                     coordinate={{
-                      latitude: Number(latitude),
-                      longitude: Number(longitude),
+                      latitude: Number(activity.latitude),
+                      longitude: Number(activity.longitude),
                     }}
-                    title={name}
-                    description={description}
+                    title={activity.name}
+                    description={activity.description}
                   />
                 ))}
               </S.StyledMap>
             </S.MapContainer>
-          </S.Container>
-      
-        )}
-    </ScrollView>
-  )
-}
+          </S.DayCard>
+        ))}
+      </ScrollView>
+    </S.Container>
+  );
+};

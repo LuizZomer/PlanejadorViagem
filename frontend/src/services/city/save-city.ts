@@ -1,7 +1,7 @@
 import { api } from "../axios";
 
-export const createCity = async (data: IFindPlaceByCityOutput) => {
-  const res = await api.post("/city", { ...data, name: data.city });
+export const createPlan = async (data: IFindPlaceByCityOutput) => {
+  const res = await api.post("/plan", { ...data });
 
   return res.data;
 };

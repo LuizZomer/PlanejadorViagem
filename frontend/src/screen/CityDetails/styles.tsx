@@ -113,3 +113,62 @@ export const SaveButton = styled(Button).attrs({
     fontWeight: "bold",
   },
 })``;
+
+export const DayCard = styled.View`
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 18px;
+  elevation: 2;
+`;
+
+export const DayTitle = styled.Text`
+  font-size: 16px;
+  font-weight: bold;
+  color: #005fa3;
+  margin-bottom: 4px;
+`;
+
+export const DayInfo = styled.Text`
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+`;
+
+export const ActivityCard = styled.View`
+  flex-direction: row;
+  align-items: flex-start;
+  margin-bottom: 10px;
+`;
+
+export const ActivityImage = styled.Image`
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  margin-right: 10px;
+  background-color: #eaeaea;
+`;
+
+export const ActivityName = styled.Text`
+  font-size: 15px;
+  font-weight: bold;
+  color: #222;
+`;
+
+export const ActivityDescription = styled.Text`
+  font-size: 13px;
+  color: #555;
+`;
+
+export const ActivityCoords = styled.Text`
+  font-size: 11px;
+  color: #888;
+  margin-top: 2px;
+`;
+
+export const Loading = styled.Text`
+  text-align: center;
+  color: #888;
+  font-size: 16px;
+  margin-top: 32px;
+`;

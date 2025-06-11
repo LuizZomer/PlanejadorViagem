@@ -5,12 +5,25 @@ interface IPlace {
   latitude: string;
 }
 
+interface IActivity {
+  name: string;
+}
+
+interface IDay {
+  date: string;
+  expense: string;
+  activities: IActivity[];
+}
+
 interface IFindPlaceByCityOutput {
-  city: string;
-  description: string;
+  destination: string;
   country: string;
+  days: IDay[];
+  description: string;
+  endDate: string;
+  host: string;
+  latitude: number;
+  longitude: number;
   spendingLevel: string;
-  longitude: string;
-  latitude: string;
-  places: IPlace[];
+  startDate: string;
 }

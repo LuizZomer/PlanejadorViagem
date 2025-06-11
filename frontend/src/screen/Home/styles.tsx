@@ -44,13 +44,14 @@ export const OptionButton = styled.TouchableOpacity<ActiveProp>`
   padding-vertical: 14px;
   padding-horizontal: 24px;
   border-radius: 12px;
-  background-color: ${(props) => (props.active ? "#00BFFF" : "#e0e0e0")};
+  background-color: ${(props: ActiveProp) =>
+    props.active ? "#00BFFF" : "#e0e0e0"};
 `;
 
 export const OptionText = styled.Text<ActiveProp>`
   font-size: 16px;
   font-weight: 600;
-  color: ${(props) => (props.active ? "#fff" : "#333")};
+  color: ${(props: ActiveProp) => (props.active ? "#fff" : "#333")};
 `;
 
 export const TabView = styled.View`
@@ -131,4 +132,40 @@ export const Header = styled.View`
 
 export const TabContainer = styled.View`
   padding: 10px;
+`;
+
+export const PlanCard = styled.View`
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  elevation: 2;
+`;
+
+export const PlanTitle = styled.Text`
+  font-size: 18px;
+  font-weight: bold;
+  color: #005fa3;
+`;
+
+export const PlanDescription = styled.Text`
+  font-size: 14px;
+  color: #444;
+  margin: 8px 0;
+`;
+
+export const PlanInfo = styled.View`
+  margin-top: 8px;
+`;
+
+export const PlanInfoText = styled.Text`
+  font-size: 13px;
+  color: #666;
+`;
+
+export const EmptyText = styled.Text`
+  text-align: center;
+  color: #888;
+  font-size: 16px;
+  margin-top: 24px;
 `;
