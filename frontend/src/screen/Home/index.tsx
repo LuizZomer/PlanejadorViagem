@@ -31,13 +31,23 @@ export const Home = () => {
       <S.TopBar>
         <Icon name="home" type="material" color="#fff" size={28} />
         <S.TopBarTitle>Bem-vindo, {user?.username}</S.TopBarTitle>
-        <Icon
-          name="person"
-          type="material"
-          color="#fff"
-          size={28}
-          onPress={() => navigate.navigate("Profile")}
-        />
+        <S.TopBarIcons>
+          <Icon
+            name="people"
+            type="material"
+            color="#fff"
+            size={28}
+            onPress={() => navigate.navigate("Friends")}
+            style={{ marginRight: 16 }}
+          />
+          <Icon
+            name="person"
+            type="material"
+            color="#fff"
+            size={28}
+            onPress={() => navigate.navigate("Profile")}
+          />
+        </S.TopBarIcons>
       </S.TopBar>
 
       <S.ScrollContent>

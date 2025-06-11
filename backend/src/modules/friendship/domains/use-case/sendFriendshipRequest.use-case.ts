@@ -26,10 +26,12 @@ export class SendFriendshipRequestUseCase {
       throw new BadRequestException('Convite já enviado ou aceito!');
     }
 
+    const externalId = friendshipReq?.externalId ?? '';
+
     return this.friendshipGateway.sendFriendshipRequest(
       sender.id,
       receive.id,
-      friendshipReq.externalId,
+      externalId,
     );
   }
 }
