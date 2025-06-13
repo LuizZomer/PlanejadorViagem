@@ -24,14 +24,11 @@ const Stack = createNativeStackNavigator<TRootStackParamList>();
 
 export const AppStack = () => {
   return (
-    <Stack.Navigator
-      // screenOptions={{  }}
-      initialRouteName="Home"
-    >
+    <Stack.Navigator initialRouteName="Home">
       <Stack.Screen
         name="Home"
         component={Home}
-        options={{ title: "Início" }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="InformCity"
