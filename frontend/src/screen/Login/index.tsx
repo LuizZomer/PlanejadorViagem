@@ -93,7 +93,6 @@ export const Login = () => {
                   onChangeText={field.onChange}
                   placeholder="Insira o nome do usuário"
                   placeholderTextColor="#9A9A9A"
-                  secureTextEntry
                   renderErrorMessage
                   errorMessage={errors.username?.message}
                 />

@@ -169,6 +169,16 @@ export const Signup = () => {
 
           <PreferencesFormContainer>
             <Text>Suas preferencias</Text>
+
+            <PreferencesContainer>
+              {selectedPreferences.map((pre) => (
+                <Badge
+                  key={pre.id}
+                  value={`${pre.name} X`}
+                  onPress={() => handlePreferencesRemove(pre.id)}
+                />
+              ))}
+            </PreferencesContainer>
             <Controller
               name="preferences"
               control={control}
@@ -187,15 +197,6 @@ export const Signup = () => {
               )}
             />
 
-            <PreferencesContainer>
-              {selectedPreferences.map((pre) => (
-                <Badge
-                  key={pre.id}
-                  value={`${pre.name} X`}
-                  onPress={() => handlePreferencesRemove(pre.id)}
-                />
-              ))}
-            </PreferencesContainer>
           </PreferencesFormContainer>
 
           <Controller
