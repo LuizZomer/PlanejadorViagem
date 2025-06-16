@@ -20,38 +20,46 @@ import {
   RequestsList,
   UsersList,
   RequestItem,
+  FriendsList as FriendsListStyled,
 } from "./styles";
 import { sendFriendRequest } from "../../services/friendship/send-friend-request";
-import { findAll } from "../../services/user/find-all";
 import { listFriendshipRequest } from "../../services/friendship/list-friendship-request";
+import { listAvaliableUser } from "../../services/user/find-all";
+import { acceptFriendshipRequest } from "../../services/friendship/accept-friendship-request";
 
 interface IUserList {
   externalId: string;
   username: string;
 }
 
-interface IFriendRequest {
+export interface IFriendRequest {
   createdAt: string;
   externalId: string;
   requester: {
     externalId: string;
     username: string;
   };
-  status: "pending" | "accepted" | "rejected";
+  status: "pending" | "accepted" | "recused";
 }
 
 const FriendsScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const queryClient = useQueryClient();
 
+  // Buscar amigos
+  const { data: friends = [], isLoading: isLoadingFriends } = useQuery({
+    queryKey: ["friends"],
+    queryFn: async () => listFriendshipRequest("accept"),
+  });
+
   // Buscar usuários
-  const { data: users, isLoading: isLoadingUsers } = useQuery({
+  const { data: users = [], isLoading: isLoadingUsers } = useQuery({
     queryKey: ["users", searchQuery],
-    queryFn: async () => findAll(),
+    queryFn: async () => listAvaliableUser(),
   });
 
   // Buscar pedidos de amizade pendentes
-  const { data: friendRequests, isLoading: isLoadingRequests } = useQuery({
+  const { data: friendRequests = [], isLoading: isLoadingRequests } = useQuery({
     queryKey: ["friendRequests"],
     queryFn: async () => listFriendshipRequest("pending"),
   });
@@ -66,12 +74,11 @@ const FriendsScreen = () => {
   });
 
   // // Aceitar pedido de amizade
-  const acceptFriendRequest = useMutation({
-    mutationFn: async (requestId: string) => {
-      await axios.post(`/api/friends/accept/${requestId}`);
-    },
+  const { mutateAsync: acceptFriendRequestMut } = useMutation({
+    mutationFn: async (requestId: string) => acceptFriendshipRequest(requestId),
     onSuccess: () => {
-      // queryClient.invalidateQueries({ queryKey: ["friendRequests"] });
+      queryClient.invalidateQueries({ queryKey: ["friendRequests"] });
+      queryClient.invalidateQueries({ queryKey: ["friends"] });
     },
   });
 
@@ -81,9 +88,35 @@ const FriendsScreen = () => {
       await axios.post(`/api/friends/reject/${requestId}`);
     },
     onSuccess: () => {
-      // queryClient.invalidateQueries({ queryKey: ["friendRequests"] });
+      queryClient.invalidateQueries({ queryKey: ["friendRequests"] });
     },
   });
+
+  const FriendListItem = ({ item }: { item: IFriendRequest }) => (
+    <UserItem>
+      <UserInfo>
+        <UserName>{item.requester.username}</UserName>
+      </UserInfo>
+    </UserItem>
+  );
+
+  const FriendsList = () => {
+    if (isLoadingFriends) {
+      return <ActivityIndicator />;
+    }
+
+    if (!friends?.length) {
+      return <PendingText>Você ainda não tem amigos.</PendingText>;
+    }
+
+    return (
+      <FriendsListStyled
+        data={friends}
+        renderItem={FriendListItem}
+        keyExtractor={(item: IFriendRequest) => item.externalId}
+      />
+    );
+  };
 
   const UserListItem = ({ item }: { item: IUserList }) => (
     <UserItem>
@@ -104,7 +137,7 @@ const FriendsScreen = () => {
       <RequestButtons>
         <ActionButton
           as={AcceptButton}
-          onPress={() => acceptFriendRequest.mutate(item.externalId)}
+          onPress={() => acceptFriendRequestMut(item.externalId)}
         >
           <ButtonText>Aceitar</ButtonText>
         </ActionButton>
@@ -152,14 +185,17 @@ const FriendsScreen = () => {
 
   return (
     <Container>
-      <SearchInput
+      {/* <SearchInput
         placeholder="Buscar usuários..."
         value={searchQuery}
         onChangeText={setSearchQuery}
-      />
+      /> */}
 
       <SectionTitle>Pedidos de Amizade</SectionTitle>
       <FriendRequestsList />
+
+      <SectionTitle>Amigos</SectionTitle>
+      <FriendsList />
 
       <SectionTitle>Resultados da Busca</SectionTitle>
       <UsersSearchList />

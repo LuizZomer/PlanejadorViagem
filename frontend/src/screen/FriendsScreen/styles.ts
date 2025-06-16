@@ -12,6 +12,7 @@ interface ITheme {
     error: string;
     warning: string;
     white: string;
+    card?: string;
   };
 }
 
@@ -27,7 +28,6 @@ export const SearchInput = styled.TextInput`
   border-width: 1px;
   border-color: ${({ theme }: { theme: ITheme }) => theme.colors.border};
   border-radius: 8px;
-  padding-horizontal: 12px;
   margin-bottom: 16px;
   color: ${({ theme }: { theme: ITheme }) => theme.colors.text};
 `;
@@ -39,23 +39,24 @@ export const SectionTitle = styled.Text`
   color: ${({ theme }: { theme: ITheme }) => theme.colors.text};
 `;
 
-export const UserItem = styled.View`
+const Card = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 12px;
-  border-bottom-width: 1px;
-  border-bottom-color: ${({ theme }: { theme: ITheme }) => theme.colors.border};
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  background-color: ${({ theme }: { theme: ITheme }) => theme.colors.card || "#fff"};
+  elevation: 2;
+  shadow-color: #000;
+  shadow-offset: 0px 1px;
+  shadow-opacity: 0.05;
+  shadow-radius: 3px;
 `;
 
-export const RequestItem = styled.View`
-  padding: 12px;
-  border-bottom-width: 1px;
-  border-bottom-color: ${({ theme }: { theme: ITheme }) => theme.colors.border};
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
+export const UserItem = styled(Card)``;
+
+export const RequestItem = styled(Card)``;
 
 export const UserInfo = styled.View`
   flex: 1;
@@ -75,14 +76,12 @@ export const UserEmail = styled.Text`
 
 export const AddButton = styled.TouchableOpacity`
   background-color: ${({ theme }: { theme: ITheme }) => theme.colors.primary};
-  padding-horizontal: 16px;
-  padding-vertical: 8px;
+  padding: 8px 16px;
   border-radius: 6px;
 `;
 
 export const ActionButton = styled.TouchableOpacity`
-  padding-horizontal: 16px;
-  padding-vertical: 8px;
+  padding: 8px 16px;
   border-radius: 6px;
   margin-left: 8px;
 `;
@@ -113,6 +112,11 @@ export const RequestButtons = styled.View`
 
 export const RequestsList = styled(FlatList)`
   max-height: 200px;
+  margin-bottom: 24px;
+`;
+
+export const FriendsList = styled(FlatList)`
+  max-height: 220px;
   margin-bottom: 24px;
 `;
 

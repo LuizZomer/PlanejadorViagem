@@ -31,7 +31,7 @@ export const AppStack = () => {
       <Stack.Screen
         name="Home"
         component={Home}
-        options={{ title: "Início" }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="InformCity"

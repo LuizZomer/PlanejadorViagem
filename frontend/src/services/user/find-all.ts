@@ -1,10 +1,8 @@
+import { UserFriendship } from "../../types/user";
 import { api } from "../axios";
 
-export const findAll = async (): Promise<{
-  externalId: string;
-  username: string;
-}> => {
-  const res = await api.get("/user");
+export const listAvaliableUser = async (): Promise<UserFriendship[]> => {
+  const res = await api.get("/friendship/available-users");
 
   return res.data;
 };
