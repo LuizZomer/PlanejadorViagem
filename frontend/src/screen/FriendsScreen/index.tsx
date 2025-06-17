@@ -35,7 +35,7 @@ interface IUserList {
 export interface IFriendRequest {
   createdAt: string;
   externalId: string;
-  requester: {
+  friend: {
     externalId: string;
     username: string;
   };
@@ -95,7 +95,7 @@ const FriendsScreen = () => {
   const FriendListItem = ({ item }: { item: IFriendRequest }) => (
     <UserItem>
       <UserInfo>
-        <UserName>{item.requester.username}</UserName>
+        <UserName>{item.friend.username}</UserName>
       </UserInfo>
     </UserItem>
   );
@@ -132,7 +132,7 @@ const FriendsScreen = () => {
   const FriendRequestItem = ({ item }: { item: IFriendRequest }) => (
     <RequestItem>
       <UserInfo>
-        <UserName>{item.requester.username}</UserName>
+        <UserName>{item.friend.username}</UserName>
       </UserInfo>
       <RequestButtons>
         <ActionButton

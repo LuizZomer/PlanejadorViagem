@@ -11,6 +11,8 @@ export class CreateOrganizationUseCase {
   ) {}
 
   async execute(organizationData: CreateOrganizationDto, externalId: string) {
+    console.log(organizationData);
+
     const [usersId, owner] = await Promise.all([
       Promise.all(
         organizationData.usersExternalId.map(async (externalId) => {
@@ -26,7 +28,6 @@ export class CreateOrganizationUseCase {
 
       this.userService.findOneByExternalId(externalId),
     ]);
-
     return this.organizationGateway.create(organizationData, usersId, owner.id);
   }
 }

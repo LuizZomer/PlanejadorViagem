@@ -8,6 +8,7 @@ import { FriendshipGateway } from './gateway/friendship-gateway.prisma';
 import { AcceptFriendshipRequestUseCase } from './domains/use-case/acceptFriendshipRequest.use-case';
 import { RefusedFriendshipRequestUseCase } from './domains/use-case/refusedFriendshipRequest.use-case';
 import { FindAllFriendshipRequestUseCase } from './domains/use-case/findAllFriendshipRequest.use-case';
+import { FindAvailableUsersUseCase } from './domains/use-case/findAvailableUsers.use-case';
 
 @Module({
   imports: [UserModule],
@@ -20,6 +21,7 @@ import { FindAllFriendshipRequestUseCase } from './domains/use-case/findAllFrien
     AcceptFriendshipRequestUseCase,
     RefusedFriendshipRequestUseCase,
     FindAllFriendshipRequestUseCase,
+    FindAvailableUsersUseCase,
   ],
   exports: [FriendshipService],
 })

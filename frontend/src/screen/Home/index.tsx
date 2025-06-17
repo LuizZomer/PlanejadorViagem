@@ -39,6 +39,18 @@ export const Home = () => {
             size={28}
             onPress={() => navigate.navigate("Friends")}
             style={{ marginRight: 16 }}
+            accessibilityLabel="Amigos"
+            accessibilityRole="button"
+          />
+          <Icon
+            name="domain"
+            type="material"
+            color="#fff"
+            size={28}
+            onPress={() => navigate.navigate("Organizations")}
+            style={{ marginRight: 16 }}
+            accessibilityLabel="Organizações"
+            accessibilityRole="button"
           />
           <Icon
             name="person"
@@ -46,6 +58,8 @@ export const Home = () => {
             color="#fff"
             size={28}
             onPress={() => navigate.navigate("Profile")}
+            accessibilityLabel="Perfil"
+            accessibilityRole="button"
           />
         </S.TopBarIcons>
       </S.TopBar>

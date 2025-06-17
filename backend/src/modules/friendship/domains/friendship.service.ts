@@ -4,6 +4,7 @@ import { AcceptFriendshipRequestUseCase } from './use-case/acceptFriendshipReque
 import { RefusedFriendshipRequestUseCase } from './use-case/refusedFriendshipRequest.use-case';
 import { FindAllFriendshipRequestUseCase } from './use-case/findAllFriendshipRequest.use-case';
 import { FriendshipStatus } from '../presentation/type/enum/friendshipStatus.enum';
+import { FindAvailableUsersUseCase } from './use-case/findAvailableUsers.use-case';
 
 @Injectable()
 export class FriendshipService {
@@ -12,6 +13,7 @@ export class FriendshipService {
     private readonly acceptFriendshipRequestUseCase: AcceptFriendshipRequestUseCase,
     private readonly refusedFriendshipRequestUseCase: RefusedFriendshipRequestUseCase,
     private readonly findAllFriendshipRequestUseCase: FindAllFriendshipRequestUseCase,
+    private readonly findAvailableUsersUseCase: FindAvailableUsersUseCase,
   ) {}
 
   async sendFriendshipRequest(
@@ -34,5 +36,9 @@ export class FriendshipService {
 
   async findAllFriendshipRequest(username: string, status: FriendshipStatus) {
     return this.findAllFriendshipRequestUseCase.execute(username, status);
+  }
+
+  async findAvailableUsers(externalId: string) {
+    return this.findAvailableUsersUseCase.execute(externalId);
   }
 }

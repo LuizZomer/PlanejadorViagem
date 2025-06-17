@@ -57,8 +57,16 @@ export class FriendshipGateway implements FriendshipGatewayInterface {
   async findAllFriendshipRequest(userId: number, status: FriendshipStatus) {
     return this.prisma.friendship.findMany({
       where: {
-        receiverId: userId,
-        status,
+        OR: [
+          {
+            receiverId: userId,
+            status,
+          },
+          {
+            requesterId: userId,
+            status,
+          },
+        ],
       },
       include: {
         requester: {
@@ -67,6 +75,34 @@ export class FriendshipGateway implements FriendshipGatewayInterface {
             username: true,
           },
         },
+        receiver: {
+          select: {
+            externalId: true,
+            username: true,
+          },
+        },
+      },
+    });
+  }
+
+  async findAllUsersWithoutFriendRequest(userId: number) {
+    return this.prisma.user.findMany({
+      where: {
+        id: { not: userId },
+        sentFriendships: {
+          none: {
+            requesterId: userId,
+          },
+        },
+        receivedFriendships: {
+          none: {
+            receiverId: userId,
+          },
+        },
+      },
+      select: {
+        externalId: true,
+        username: true,
       },
     });
   }

@@ -20,19 +20,21 @@ export class FindAllFriendshipRequestUseCase {
     const allFriendshipRequest =
       await this.friendshipGateway.findAllFriendshipRequest(user.id, status);
 
-    return this.allFriendshipMapper(allFriendshipRequest);
+    return this.allFriendshipMapper(allFriendshipRequest, username);
   }
 
   allFriendshipMapper(
     allFriendship: IFriendshipWithUser[],
+    username: string,
   ): IFindAllFriendshipOutput[] {
-    return allFriendship.map(
-      ({ createdAt, externalId, status, requester }) => ({
+    return allFriendship.map(({ createdAt, externalId, status, requester, receiver }) => {
+      const friend = requester.username === username ? receiver : requester;
+      return {
         createdAt,
         externalId,
-        requester,
+        friend,
         status,
-      }),
-    );
+      };
+    });
   }
 }

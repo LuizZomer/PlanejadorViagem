@@ -84,4 +84,19 @@ export class FriendshipController {
       friendshipRequests: requestList,
     };
   }
+
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  @Get('available-users')
+  async listAvailableUsers(@Req() req: RequestWithUser) {
+    const externalId = req.user.externalId;
+
+    const availableUsers =
+      await this.friendshipService.findAvailableUsers(externalId);
+
+    return {
+      statusCode: HttpStatus.OK,
+      availableUsers,
+    };
+  }
 }

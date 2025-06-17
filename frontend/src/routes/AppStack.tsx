@@ -8,6 +8,8 @@ import { SuggestCities } from "../screen/SuggestCities";
 import { CityList } from "../screen/CityList";
 import { CityDetails } from "../screen/CityDetails";
 import FriendsScreen from "../screen/FriendsScreen";
+import OrganizationScreen from "../screen/Organization";
+import OrganizationCreateScreen from "../screen/OrganizationCreate";
 
 export type TRootStackParamList = {
   Home: undefined;
@@ -18,6 +20,8 @@ export type TRootStackParamList = {
   CityList: IGetCityByDescription;
   CityDetails: { externalId: string };
   Friends: undefined;
+  Organizations: undefined;
+  OrganizationCreate: undefined;
 };
 
 const Stack = createNativeStackNavigator<TRootStackParamList>();
@@ -64,6 +68,16 @@ export const AppStack = () => {
         name="Friends"
         component={FriendsScreen}
         options={{ title: "Amigos" }}
+      />
+      <Stack.Screen
+        name="Organizations"
+        component={OrganizationScreen}
+        options={{ title: "Organizações" }}
+      />
+      <Stack.Screen
+        name="OrganizationCreate"
+        component={OrganizationCreateScreen}
+        options={{ title: "Nova Organização" }}
       />
     </Stack.Navigator>
   );

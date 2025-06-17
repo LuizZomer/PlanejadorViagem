@@ -18,4 +18,7 @@ export class FriendshipGatewayInterface {
     userId: number,
     status: FriendshipStatus,
   ) => Promise<IFriendshipWithUser[]>;
+  findAllUsersWithoutFriendRequest: (
+    userId: number,
+  ) => Promise<{ externalId: string; username: string }[]>;
 }
