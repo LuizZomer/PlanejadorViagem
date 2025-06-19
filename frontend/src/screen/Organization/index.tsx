@@ -45,6 +45,7 @@ const OrganizationScreen = () => {
       accessibilityRole="button"
       accessibilityLabel={`Organização ${item.name}`}
       style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
+      onPress={() => navigate.navigate("OrganizationDetails", { organizationId: item.externalId })}
     >
       <View>
         <OrgName>{item.name}</OrgName>

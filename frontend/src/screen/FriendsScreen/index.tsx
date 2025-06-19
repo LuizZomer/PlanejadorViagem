@@ -26,6 +26,7 @@ import { sendFriendRequest } from "../../services/friendship/send-friend-request
 import { listFriendshipRequest } from "../../services/friendship/list-friendship-request";
 import { listAvaliableUser } from "../../services/user/find-all";
 import { acceptFriendshipRequest } from "../../services/friendship/accept-friendship-request";
+import { recuseFriendshipRequest } from "../../services/friendship/recuse-friendship-request";
 
 interface IUserList {
   externalId: string;
@@ -84,9 +85,7 @@ const FriendsScreen = () => {
 
   // Recusar pedido de amizade
   const rejectFriendRequest = useMutation({
-    mutationFn: async (requestId: string) => {
-      await axios.post(`/api/friends/reject/${requestId}`);
-    },
+    mutationFn: async (requestId: string) => recuseFriendshipRequest(requestId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["friendRequests"] });
     },
@@ -174,9 +173,17 @@ const FriendsScreen = () => {
       return <ActivityIndicator />;
     }
 
+    const filteredUsers = users.filter((u: IUserList) =>
+      u.username.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    if (!filteredUsers.length) {
+      return <PendingText>Nenhum usuário encontrado.</PendingText>;
+    }
+
     return (
       <UsersList
-        data={users}
+        data={filteredUsers}
         renderItem={UserListItem}
         keyExtractor={(item: IUserList) => item.externalId}
       />
@@ -185,17 +192,17 @@ const FriendsScreen = () => {
 
   return (
     <Container>
-      {/* <SearchInput
-        placeholder="Buscar usuários..."
-        value={searchQuery}
-        onChangeText={setSearchQuery}
-      /> */}
-
       <SectionTitle>Pedidos de Amizade</SectionTitle>
       <FriendRequestsList />
 
       <SectionTitle>Amigos</SectionTitle>
       <FriendsList />
+
+      <SearchInput
+        placeholder="Buscar usuários..."
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+      />
 
       <SectionTitle>Resultados da Busca</SectionTitle>
       <UsersSearchList />

@@ -17,11 +17,6 @@ import { IFriendRequest } from "../FriendsScreen";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationRoutesProp } from "../../shared/types/navigation/navigate";
 
-interface IUser {
-  externalId: string;
-  username: string;
-}
-
 const OrganizationCreateScreen = () => {
   const [name, setName] = useState("");
   const [selectedMembers, setSelectedMembers] = useState<string[]>([]);

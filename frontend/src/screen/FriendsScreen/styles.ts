@@ -46,7 +46,8 @@ const Card = styled.View`
   padding: 12px 16px;
   border-radius: 10px;
   margin-bottom: 12px;
-  background-color: ${({ theme }: { theme: ITheme }) => theme.colors.card || "#fff"};
+  background-color: ${({ theme }: { theme: ITheme }) =>
+    theme.colors.card || "#fff"};
   elevation: 2;
   shadow-color: #000;
   shadow-offset: 0px 1px;
