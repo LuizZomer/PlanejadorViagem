@@ -89,10 +89,56 @@ export const PlanInfoText = styled.Text`
   font-size: 14px;
 `;
 
-export const Loading = styled.Text`
-  text-align: center;
-  color: #666;
+export const AssignButton = styled.TouchableOpacity`
+  background-color: #00bfff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  align-self: flex-start;
+  margin-top: 12px;
+`;
+
+export const AssignButtonText = styled.Text`
+  color: #fff;
+  font-weight: bold;
+`;
+
+export const ModalBackdrop = styled.View`
+  flex: 1;
+  background-color: rgba(0, 0, 0, 0.5);
+  align-items: center;
+  justify-content: center;
+`;
+
+export const ModalContent = styled.View`
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  width: 80%;
+`;
+
+export const ModalTitle = styled.Text`
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: #333;
+`;
+
+export const ModalActionButton = styled.TouchableOpacity`
+  background-color: #00bfff;
+  padding: 12px;
+  border-radius: 8px;
   margin-top: 16px;
+`;
+
+export const ModalActionText = styled.Text`
+  text-align: center;
+  color: #fff;
+  font-weight: bold;
+`;
+
+export const LoadingSmall = styled.Text`
+  color: #666;
+  font-size: 14px;
 `;
 
 export const EmptyText = styled.Text`

@@ -15,7 +15,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { TRootStackParamList } from "../../routes/AppStack";
 import { OptionContainer } from "../../shared/components/OptionsButton";
-import { findPlaceByCity } from "../../services/city/find-place-by-city";
+import { findPlaceByCity } from "../../services/plan/find-place-by-city";
 import { FormContainer } from "../../styles/GlobalStyles";
 
 const schema = z.object({
@@ -64,7 +64,10 @@ export const ChooseCity = () => {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}
     >
-      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
+      >
         <Text h4 style={styles.title}>
           Crie seu planejamento
         </Text>
@@ -78,7 +81,9 @@ export const ChooseCity = () => {
                 value={field.value}
                 onChangeText={field.onChange}
                 placeholder="ex: Rio de Janeiro"
-                leftIcon={<Icon name="location-city" type="material" color="#00BFFF" />}
+                leftIcon={
+                  <Icon name="location-city" type="material" color="#00BFFF" />
+                }
                 errorMessage={errors.destination?.message}
                 inputStyle={styles.inputText}
                 inputContainerStyle={styles.inputContainer}
@@ -95,7 +100,9 @@ export const ChooseCity = () => {
                 value={field.value}
                 onChangeText={field.onChange}
                 placeholder="ex: Brasil"
-                leftIcon={<Icon name="public" type="material" color="#00BFFF" />}
+                leftIcon={
+                  <Icon name="public" type="material" color="#00BFFF" />
+                }
                 errorMessage={errors.country?.message}
                 inputStyle={styles.inputText}
                 inputContainerStyle={styles.inputContainer}
@@ -132,8 +139,14 @@ export const ChooseCity = () => {
                   inputContainerStyle={styles.inputContainer}
                   containerStyle={styles.inputWrapper}
                   leftIcon={
-                    <TouchableOpacity onPress={() => setStartDatePickerVisible(true)}>
-                      <Icon name="calendar-today" type="material" color="#00BFFF" />
+                    <TouchableOpacity
+                      onPress={() => setStartDatePickerVisible(true)}
+                    >
+                      <Icon
+                        name="calendar-today"
+                        type="material"
+                        color="#00BFFF"
+                      />
                     </TouchableOpacity>
                   }
                 />
@@ -141,7 +154,9 @@ export const ChooseCity = () => {
                   isVisible={isStartDatePickerVisible}
                   mode="date"
                   onConfirm={(date) => {
-                    setValue("startDate", formatDate(date), { shouldValidate: true });
+                    setValue("startDate", formatDate(date), {
+                      shouldValidate: true,
+                    });
                     setStartDatePickerVisible(false);
                   }}
                   onCancel={() => setStartDatePickerVisible(false)}
@@ -165,7 +180,9 @@ export const ChooseCity = () => {
                   inputContainerStyle={styles.inputContainer}
                   containerStyle={styles.inputWrapper}
                   leftIcon={
-                    <TouchableOpacity onPress={() => setEndDatePickerVisible(true)}>
+                    <TouchableOpacity
+                      onPress={() => setEndDatePickerVisible(true)}
+                    >
                       <Icon name="event" type="material" color="#00BFFF" />
                     </TouchableOpacity>
                   }
@@ -174,7 +191,9 @@ export const ChooseCity = () => {
                   isVisible={isEndDatePickerVisible}
                   mode="date"
                   onConfirm={(date) => {
-                    setValue("endDate", formatDate(date), { shouldValidate: true });
+                    setValue("endDate", formatDate(date), {
+                      shouldValidate: true,
+                    });
                     setEndDatePickerVisible(false);
                   }}
                   onCancel={() => setEndDatePickerVisible(false)}
@@ -193,7 +212,9 @@ export const ChooseCity = () => {
                   { id: "false", label: "Não" },
                 ]}
                 defaultValue="false"
-                onChange={(selected) => setValue("hosting", selected === "true")}
+                onChange={(selected) =>
+                  setValue("hosting", selected === "true")
+                }
                 error={errors.hosting?.message}
               />
             )}

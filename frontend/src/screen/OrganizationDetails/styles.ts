@@ -12,7 +12,6 @@ interface ITheme {
 }
 
 export const Container = styled.View`
-  flex: 1;
   padding: 16px;
   background-color: ${({ theme }: { theme: ITheme }) =>
     theme.colors.background};
@@ -38,6 +37,19 @@ export const MemberItem = styled.View`
 export const MemberName = styled.Text`
   font-size: 16px;
   color: ${({ theme }: { theme: ITheme }) => theme.colors.text};
+`;
+
+export const OwnerName = styled.Text`
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  color: ${({ theme }: { theme: ITheme }) => theme.colors.text};
+`;
+
+export const EmptyMessage = styled.Text`
+  font-size: 14px;
+  color: ${({ theme }: { theme: ITheme }) => theme.colors.text};
+  margin-bottom: 8px;
 `;
 
 export const PlanningItem = styled.View`

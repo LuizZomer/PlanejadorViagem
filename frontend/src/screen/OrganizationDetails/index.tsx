@@ -1,58 +1,80 @@
 import React from "react";
-import { ActivityIndicator, FlatList } from "react-native";
+import { ActivityIndicator, FlatList, TouchableOpacity } from "react-native";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import { TRootStackParamList } from "../../routes/AppStack";
-import { listOrganizationMembers } from "../../services/organization/list-members";
-import { listOrganizationPlannings } from "../../services/organization/list-plannings";
+import {
+  getOrganizationDetails,
+  IOrganizationDetails,
+} from "../../services/organization/list-plannings";
 import * as S from "./styles";
 import { formatDate } from "../../shared/utils/formatDate";
+import { useNavigation } from "@react-navigation/native";
+import { NavigationRoutesProp } from "../../shared/types/navigation/navigate";
 
 export const OrganizationDetailsScreen = () => {
-  const route = useRoute<RouteProp<TRootStackParamList, "OrganizationDetails">>();
+  const navigate = useNavigation<NavigationRoutesProp>();
+  const route =
+    useRoute<RouteProp<TRootStackParamList, "OrganizationDetails">>();
   const organizationId = route.params.organizationId;
 
-  const { data: members = [], isLoading: loadingMembers } = useQuery({
-    queryKey: ["org-members", organizationId],
-    queryFn: () => listOrganizationMembers(organizationId),
+  const { data: organization, isLoading } = useQuery<IOrganizationDetails>({
+    queryKey: ["organization-details", organizationId],
+    queryFn: () => getOrganizationDetails(organizationId),
   });
 
-  const { data: plannings = [], isLoading: loadingPlans } = useQuery({
-    queryKey: ["org-plannings", organizationId],
-    queryFn: () => listOrganizationPlannings(organizationId),
-  });
+  const members = organization?.organizationUsers ?? [];
+  const plannings = organization?.plan ?? [];
+  const owner = organization?.owner;
 
   const renderMember = ({ item }: any) => (
     <S.MemberItem>
-      <S.MemberName>{item.username}</S.MemberName>
+      <S.MemberName>{item.user.username}</S.MemberName>
     </S.MemberItem>
   );
 
   const renderPlanning = ({ item }: any) => (
-    <S.PlanningItem>
-      <S.PlanningDestination>{item.destination}</S.PlanningDestination>
-      <S.PlanningPeriod>
-        {formatDate(item.startDate)} - {formatDate(item.endDate)}
-      </S.PlanningPeriod>
-    </S.PlanningItem>
+    <TouchableOpacity
+      onPress={() =>
+        navigate.navigate("CityDetails", { externalId: item.externalId })
+      }
+    >
+      <S.PlanningItem>
+        <S.PlanningDestination>{item.destination}</S.PlanningDestination>
+        <S.PlanningPeriod>
+          {formatDate(item.startDate)} - {formatDate(item.endDate)}
+        </S.PlanningPeriod>
+      </S.PlanningItem>
+    </TouchableOpacity>
   );
 
   return (
     <S.Container>
-      <S.SectionTitle>Membros</S.SectionTitle>
-      {loadingMembers ? (
+      <S.SectionTitle>Dono</S.SectionTitle>
+      {isLoading ? (
         <ActivityIndicator />
+      ) : (
+        <S.OwnerName>{owner?.username}</S.OwnerName>
+      )}
+
+      <S.SectionTitle>Membros</S.SectionTitle>
+      {isLoading ? (
+        <ActivityIndicator />
+      ) : members.length === 0 ? (
+        <S.EmptyMessage>Nenhum membro encontrado</S.EmptyMessage>
       ) : (
         <FlatList
           data={members}
-          keyExtractor={(item) => item.externalId}
+          keyExtractor={(item) => String(item.user.externalId)}
           renderItem={renderMember}
         />
       )}
 
       <S.SectionTitle>Planejamentos</S.SectionTitle>
-      {loadingPlans ? (
+      {isLoading ? (
         <ActivityIndicator />
+      ) : plannings.length === 0 ? (
+        <S.EmptyMessage>Sem planejamentos</S.EmptyMessage>
       ) : (
         <FlatList
           data={plannings}

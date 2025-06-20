@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { ScrollView, View, Text } from "react-native";
-import { planDetails } from "../../services/city/plan-details";
+import { planDetails } from "../../services/plan/plan-details";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { TRootStackParamList } from "../../routes/AppStack";
 import * as S from "./styles";

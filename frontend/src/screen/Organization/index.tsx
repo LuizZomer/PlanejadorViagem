@@ -1,5 +1,11 @@
 import React from "react";
-import { ActivityIndicator, FlatList, TouchableOpacity, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  TouchableOpacity,
+  Text,
+  View,
+} from "react-native";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { deleteOrganization } from "../../services/organization/delete-organization";
@@ -41,26 +47,36 @@ const OrganizationScreen = () => {
   });
 
   const OrgListItem = ({ item }: { item: IOrganization }) => (
-    <OrgItem
-      accessibilityRole="button"
-      accessibilityLabel={`Organização ${item.name}`}
-      style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
-      onPress={() => navigate.navigate("OrganizationDetails", { organizationId: item.externalId })}
+    <TouchableOpacity
+      onPress={() =>
+        navigate.navigate("OrganizationDetails", {
+          organizationId: item.externalId,
+        })
+      }
     >
-      <View>
-        <OrgName>{item.name}</OrgName>
-        <OrgName>{new Date(item.createdAt).toLocaleDateString()}</OrgName>
-      </View>
-      <TouchableOpacity
-        onPress={() => deleteOrgMut(item.externalId)}
-        accessibilityLabel={`Excluir organização ${item.name}`}
+      <OrgItem
         accessibilityRole="button"
+        accessibilityLabel={`Organização ${item.name}`}
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
       >
-        <Text style={{ fontSize: 18 }}>🗑️</Text>
-      </TouchableOpacity>
-    </OrgItem>
+        <View>
+          <OrgName>{item.name}</OrgName>
+          <OrgName>{new Date(item.createdAt).toLocaleDateString()}</OrgName>
+        </View>
+        <TouchableOpacity
+          onPress={() => deleteOrgMut(item.externalId)}
+          accessibilityLabel={`Excluir organização ${item.name}`}
+          accessibilityRole="button"
+        >
+          <Text style={{ fontSize: 18 }}>🗑️</Text>
+        </TouchableOpacity>
+      </OrgItem>
+    </TouchableOpacity>
   );
-
 
   return (
     <Container>

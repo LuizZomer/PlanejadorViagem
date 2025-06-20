@@ -1,7 +1,7 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { Button } from "@rneui/themed";
 import { TRootStackParamList } from "../../routes/AppStack";
-import { createPlan } from "../../services/city/save-city";
+import { createPlan } from "../../services/plan/save-city";
 import { NavigationRoutesProp } from "../../shared/types/navigation/navigate";
 import { Marker } from "react-native-maps";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

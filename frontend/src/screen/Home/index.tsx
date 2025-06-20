@@ -1,18 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { StatusBar, Touchable, TouchableOpacity } from "react-native";
 import { authStore } from "../../shared/stores/auth/authStore";
 import { Icon } from "@rneui/themed";
 import { InformCityTab } from "../../shared/components/Pages/Home/InformCityTab";
 import { useQuery } from "@tanstack/react-query";
-import { getPlans } from "../../services/city/get-plans";
+import { getPlans } from "../../services/plan/get-plans";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationRoutesProp } from "../../shared/types/navigation/navigate";
 import { SuggestCityTab } from "../../shared/components/Pages/Home/SuggestCityTab";
 import * as S from "./styles";
 import { formatDate } from "../../shared/utils/formatDate";
+import { AssignedPlanInOrg } from "../../shared/components/Dialog/AssignedPlanInOrg";
 
 export const Home = () => {
   const user = authStore((store) => store.user);
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedPlanExternalId, setSelectedPlanExternalId] =
+    useState<string>("");
 
   const [selectedOption, setSelectedOption] = React.useState<
     "inform" | "suggest"
@@ -24,6 +28,11 @@ export const Home = () => {
     queryFn: async () => getPlans(),
     staleTime: 1000 * 60 * 5,
   });
+
+  const handleAssignPlan = (planExternalId: string) => {
+    setSelectedPlanExternalId(planExternalId);
+    setIsOpen(true);
+  };
 
   return (
     <S.Screen>
@@ -90,7 +99,7 @@ export const Home = () => {
         </S.TabView>
 
         {isLoading ? (
-          <S.Loading>Carregando cidades...</S.Loading>
+          <S.LoadingSmall>Carregando cidades...</S.LoadingSmall>
         ) : (
           <S.CardsContainer>
             {plans.length === 0 && (
@@ -120,12 +129,26 @@ export const Home = () => {
                       Nível de gasto: {plan.spendingLevel}
                     </S.PlanInfoText>
                   </S.PlanInfo>
+                  <S.AssignButton
+                    onPress={() => handleAssignPlan(plan.externalId)}
+                  >
+                    <S.AssignButtonText>
+                      Atribuir à Organização
+                    </S.AssignButtonText>
+                  </S.AssignButton>
                 </S.PlanCard>
               </TouchableOpacity>
             ))}
           </S.CardsContainer>
         )}
       </S.ScrollContent>
+      {isOpen && selectedPlanExternalId && (
+        <AssignedPlanInOrg
+          isOpen={isOpen}
+          toggleDialog={() => setIsOpen(false)}
+          planExternalId={selectedPlanExternalId}
+        />
+      )}
     </S.Screen>
   );
 };

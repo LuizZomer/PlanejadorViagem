@@ -5,7 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import { View } from "react-native";
 import { z } from "zod";
 import { TRootStackParamList } from "../../routes/AppStack";
-import { suggestCitiesByDescription } from "../../services/city/suggest-cities-by-description";
+import { suggestCitiesByDescription } from "../../services/plan/suggest-cities-by-description";
 import { OptionContainer } from "../../shared/components/OptionsButton";
 import { FormContainer } from "../../styles/GlobalStyles";
 import * as S from "./styles";
@@ -49,9 +49,9 @@ export const SuggestCities = () => {
   return (
     <S.ChooseCityContainer>
       <S.Header>
-      <Text h4 style={{ color: "#00BFFF", marginBottom: 20 }}>
-        Passe a descrição do seu planejamento
-      </Text>
+        <Text h4 style={{ color: "#00BFFF", marginBottom: 20 }}>
+          Passe a descrição do seu planejamento
+        </Text>
       </S.Header>
       <FormContainer>
         <S.FormWrapper>
@@ -85,7 +85,10 @@ export const SuggestCities = () => {
             error={errors.spendingLevel?.message}
           />
 
-          <S.StyledButton onPress={handleSubmit(handleSend)} disabled={isSubmitting}>
+          <S.StyledButton
+            onPress={handleSubmit(handleSend)}
+            disabled={isSubmitting}
+          >
             {isSubmitting ? "Enviando..." : "Enviar"}
           </S.StyledButton>
         </S.FormWrapper>
