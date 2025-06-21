@@ -16,6 +16,8 @@ import { listFriendshipRequest } from "../../services/friendship/list-friendship
 import { IFriendRequest } from "../FriendsScreen";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationRoutesProp } from "../../shared/types/navigation/navigate";
+import Toast from "react-native-toast-message";
+import { Button } from "@rneui/themed";
 
 const OrganizationCreateScreen = () => {
   const [name, setName] = useState("");
@@ -42,6 +44,10 @@ const OrganizationCreateScreen = () => {
       setName("");
       setSelectedMembers([]);
       queryClient.invalidateQueries({ queryKey: ["organizations"] });
+      Toast.show({
+        type: "success",
+        text1: "Organização criada com sucesso",
+      });
       navigate.navigate("Organizations");
     },
   });
@@ -78,7 +84,6 @@ const OrganizationCreateScreen = () => {
         onChangeText={setName}
       />
       <SectionTitle>Membros</SectionTitle>
-
       {isLoadingUsers ? (
         <ActivityIndicator />
       ) : (

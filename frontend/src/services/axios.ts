@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import Toast from "react-native-toast-message";
 
 export const api = axios.create({
   baseURL: "http://192.168.1.6:3000/api",
@@ -18,5 +19,14 @@ api.interceptors.request.use(
 
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    console.log(error);
+
+    Toast.show({
+      type: "error",
+      text1: "Erro",
+      text2: error.response?.data.message,
+    });
+    return Promise.reject(error);
+  }
 );

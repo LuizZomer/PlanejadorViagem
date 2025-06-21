@@ -10,6 +10,7 @@ import { AuthRequiredProvider } from "./src/shared/providers/AuthRequiredProvide
 import { authStore } from "./src/shared/stores/auth/authStore";
 import { theme as rneTheme } from "./src/styles/theme";
 import { theme as styledTheme } from "./src/shared/theme/styled";
+import Toast from "react-native-toast-message";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => {
               <NavigationContainer>
                 {isAuthenticated ? <AppStack /> : <AuthStack />}
               </NavigationContainer>
+              <Toast />
             </AuthRequiredProvider>
           </ThemeProvider>
         </RNEThemeProvider>

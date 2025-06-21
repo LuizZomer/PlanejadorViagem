@@ -1,14 +1,16 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { Input, Text } from "@rneui/themed";
+import { Icon, Input, Text } from "@rneui/themed";
 import { Controller, useForm } from "react-hook-form";
-import { View } from "react-native";
 import { z } from "zod";
 import { TRootStackParamList } from "../../routes/AppStack";
 import { suggestCitiesByDescription } from "../../services/plan/suggest-cities-by-description";
 import { OptionContainer } from "../../shared/components/OptionsButton";
 import { FormContainer } from "../../styles/GlobalStyles";
 import * as S from "./styles";
+import React, { useState } from "react";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const schema = z.object({
   description: z
@@ -17,12 +19,19 @@ const schema = z.object({
     .min(1, "Campo obrigatório")
     .max(200, "Maximo de 200 caracteres"),
   spendingLevel: z.string().min(1, "Campo obrigatório"),
+  startDate: z.string().min(1),
+  endDate: z.string().min(1),
+  hosting: z.boolean(),
 });
 
 export type SuggestCityFormData = z.infer<typeof schema>;
 
+const formatDate = (date: Date) => date.toISOString().split("T")[0];
+
 export const SuggestCities = () => {
   const { navigate } = useNavigation<NavigationProp<TRootStackParamList>>();
+  const [isStartDatePickerVisible, setStartDatePickerVisible] = useState(false);
+  const [isEndDatePickerVisible, setEndDatePickerVisible] = useState(false);
 
   const {
     control,
@@ -34,6 +43,9 @@ export const SuggestCities = () => {
     defaultValues: {
       description: "",
       spendingLevel: "medio",
+      endDate: "",
+      startDate: "",
+      hosting: false,
     },
   });
 
@@ -43,7 +55,7 @@ export const SuggestCities = () => {
       description,
       spendingLevel,
     });
-    navigate("CityList", cities);
+    navigate("CityList", { cityList: cities, formData: data });
   };
 
   return (
@@ -85,6 +97,103 @@ export const SuggestCities = () => {
             error={errors.spendingLevel?.message}
           />
 
+          <Controller
+            name="startDate"
+            control={control}
+            render={({ field }) => (
+              <>
+                <Input
+                  label="Data de Início"
+                  value={field.value}
+                  onChangeText={field.onChange}
+                  placeholder="ex: 2025-06-17"
+                  onFocus={() => setStartDatePickerVisible(true)}
+                  errorMessage={errors.startDate?.message}
+                  inputStyle={styles.inputText}
+                  inputContainerStyle={styles.inputContainer}
+                  containerStyle={styles.inputWrapper}
+                  leftIcon={
+                    <TouchableOpacity
+                      onPress={() => setStartDatePickerVisible(true)}
+                    >
+                      <Icon
+                        name="calendar-today"
+                        type="material"
+                        color="#00BFFF"
+                      />
+                    </TouchableOpacity>
+                  }
+                />
+                <DateTimePickerModal
+                  isVisible={isStartDatePickerVisible}
+                  mode="date"
+                  onConfirm={(date) => {
+                    setValue("startDate", formatDate(date), {
+                      shouldValidate: true,
+                    });
+                    setStartDatePickerVisible(false);
+                  }}
+                  onCancel={() => setStartDatePickerVisible(false)}
+                />
+              </>
+            )}
+          />
+          <Controller
+            name="endDate"
+            control={control}
+            render={({ field }) => (
+              <>
+                <Input
+                  label="Data de Fim"
+                  value={field.value}
+                  onChangeText={field.onChange}
+                  placeholder="ex: 2025-06-20"
+                  onFocus={() => setEndDatePickerVisible(true)}
+                  errorMessage={errors.endDate?.message}
+                  inputStyle={styles.inputText}
+                  inputContainerStyle={styles.inputContainer}
+                  containerStyle={styles.inputWrapper}
+                  leftIcon={
+                    <TouchableOpacity
+                      onPress={() => setEndDatePickerVisible(true)}
+                    >
+                      <Icon name="event" type="material" color="#00BFFF" />
+                    </TouchableOpacity>
+                  }
+                />
+                <DateTimePickerModal
+                  isVisible={isEndDatePickerVisible}
+                  mode="date"
+                  onConfirm={(date) => {
+                    setValue("endDate", formatDate(date), {
+                      shouldValidate: true,
+                    });
+                    setEndDatePickerVisible(false);
+                  }}
+                  onCancel={() => setEndDatePickerVisible(false)}
+                />
+              </>
+            )}
+          />
+          <Controller
+            name="hosting"
+            control={control}
+            render={({ field }) => (
+              <OptionContainer
+                title="Precisa de Hospedagem?"
+                options={[
+                  { id: "true", label: "Sim" },
+                  { id: "false", label: "Não" },
+                ]}
+                defaultValue="false"
+                onChange={(selected) =>
+                  setValue("hosting", selected === "true")
+                }
+                error={errors.hosting?.message}
+              />
+            )}
+          />
+
           <S.StyledButton
             onPress={handleSubmit(handleSend)}
             disabled={isSubmitting}
@@ -96,3 +205,21 @@ export const SuggestCities = () => {
     </S.ChooseCityContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  inputWrapper: {
+    paddingHorizontal: 0,
+    marginBottom: 10,
+  },
+  inputText: {
+    fontSize: 16,
+    color: "#333",
+  },
+  inputContainer: {
+    borderBottomWidth: 0,
+    backgroundColor: "#F0F4F8",
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+  },
+});

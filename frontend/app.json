@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "explorelens",
-    "slug": "explorelens",
+    "slug": "explore-lens",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

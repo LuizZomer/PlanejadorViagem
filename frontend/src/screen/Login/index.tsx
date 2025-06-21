@@ -24,6 +24,7 @@ import {
 } from "./styles";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { TCombinedStackParamList } from "../../shared/types/navigation/navigate";
+import Toast from "react-native-toast-message";
 
 const loginSchema = z.object({
   username: z.string().min(3, "Nome de usuário é obrigatório"),
@@ -54,10 +55,18 @@ export const Login = () => {
   };
 
   const handleLogin = async (data: TLogin) => {
-    return login(data).then((token) => {
-      storeLogin(token);
-      // navigation.navigate("Home");
-    });
+    return login(data)
+      .then((token) => {
+        storeLogin(token);
+        // navigation.navigate("Home");
+      })
+      .catch((error) => {
+        Toast.show({
+          type: "error",
+          text1: "Erro",
+          text2: "Usuário ou senha inválidos",
+        });
+      });
   };
 
   return (

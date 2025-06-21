@@ -4,7 +4,7 @@ import { Home } from "../screen/Home";
 import { ChooseCity } from "../screen/ChooseCity";
 import { PlacesList } from "../screen/Place";
 import { Profile } from "../screen/Profile";
-import { SuggestCities } from "../screen/SuggestCities";
+import { SuggestCities, SuggestCityFormData } from "../screen/SuggestCities";
 import { CityList } from "../screen/CityList";
 import { CityDetails } from "../screen/CityDetails";
 import FriendsScreen from "../screen/FriendsScreen";
@@ -18,7 +18,7 @@ export type TRootStackParamList = {
   SuggestCity: undefined;
   PlaceList: IFindPlaceByCityOutput;
   Profile: undefined;
-  CityList: IGetCityByDescription;
+  CityList: { cityList: IGetCityByDescription; formData: SuggestCityFormData };
   CityDetails: { externalId: string };
   Friends: undefined;
   Organizations: undefined;

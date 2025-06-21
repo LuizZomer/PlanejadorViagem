@@ -1,6 +1,6 @@
 import { api } from "../axios";
 
-interface IFindPlaceById {
+export interface IFindPlaceById {
   country: string;
   spendingLevel: string;
   destination: string;

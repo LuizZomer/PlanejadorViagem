@@ -6,53 +6,55 @@ import { createPlan } from "../../services/plan/save-city";
 import { useState } from "react";
 import { Marker } from "react-native-maps";
 import * as S from "./styles";
+import {
+  findPlaceByCity,
+  IFindPlaceById,
+} from "../../services/plan/find-place-by-city";
+import Toast from "react-native-toast-message";
 
 export const CityList = () => {
   const route = useRoute<RouteProp<TRootStackParamList, "CityList">>();
   const { navigate } = useNavigation<NavigationRoutesProp>();
   const queryClient = useQueryClient();
-  const { cities, description, spendingLevel } = route.params;
+  const { cityList, formData } = route.params;
 
-  const [suggestedCities, setSuggestedCities] = useState(cities);
+  const [suggestedCities, setSuggestedCities] = useState(cityList.cities);
 
-  // const mutation = useMutation({
-  //   mutationFn: async (cityData: IFindPlaceByCityOutput) =>
-  //     createCity(cityData),
-  //   onSuccess: (_, variables) => {
-  //     setSuggestedCities((prev) => {
-  //       return prev.filter((city) => city.name !== variables.city);
-  //     });
-  //   },
-  // });
+  const mutation = useMutation({
+    mutationFn: async (cityData: IFindPlaceById) => findPlaceByCity(cityData),
+    onSuccess: (data) => {
+      navigate("PlaceList", data);
+    },
+    onError: () => {
+      Toast.show({
+        type: "error",
+        text1: "Erro ao buscar cidades",
+      });
+    },
+  });
 
-  // const handleSaveCity = async ({
-  //   city,
-  //   country,
-  //   description,
-  //   latitude,
-  //   longitude,
-  //   places,
-  // }: Omit<IFindPlaceByCityOutput, "spendingLevel">) => {
-  //   await mutation.mutateAsync({
-  //     city,
-  //     country,
-  //     description,
-  //     latitude,
-  //     longitude,
-  //     places,
-  //     spendingLevel,
-  //   });
-  // };
-
-  // const handleHomeReturn = () => {
-  //   queryClient.invalidateQueries({ queryKey: ["get-cities"] });
-  //   navigate("Home");
-  // };
+  const handleSaveCity = async ({
+    destination,
+    country,
+    spendingLevel,
+    startDate,
+    endDate,
+    hosting,
+  }: IFindPlaceById) => {
+    await mutation.mutateAsync({
+      destination,
+      country,
+      spendingLevel,
+      startDate,
+      endDate,
+      hosting,
+    });
+  };
 
   return (
     <S.Container>
-      <S.Title>{description}</S.Title>
-      <S.Subtitle>Nível de gastos {spendingLevel}</S.Subtitle>
+      <S.Title>{cityList.description}</S.Title>
+      <S.Subtitle>Nível de gastos {cityList.spendingLevel}</S.Subtitle>
 
       {suggestedCities.map(
         ({ country, description, name, places, latitude, longitude }) => (
@@ -92,19 +94,19 @@ export const CityList = () => {
             <S.Spacer />
 
             <S.SaveButton
-            // onPress={() =>
-            // handleSaveCity({
-            //   city: name,
-            //   country,
-            //   description,
-            //   latitude,
-            //   longitude,
-            //   places,
-            // })
-            // }
-            // disabled={mutation.isPending}
+              onPress={() =>
+                handleSaveCity({
+                  destination: name,
+                  country,
+                  spendingLevel: formData.spendingLevel,
+                  startDate: formData.startDate,
+                  endDate: formData.endDate,
+                  hosting: formData.hosting,
+                })
+              }
+              disabled={mutation.isPending}
             >
-              {/* {mutation.isPending ? "Aguardando..." : "Salvar"} */}
+              {mutation.isPending ? "Gerando..." : "Gerar planejamento"}
             </S.SaveButton>
           </S.Card>
         )

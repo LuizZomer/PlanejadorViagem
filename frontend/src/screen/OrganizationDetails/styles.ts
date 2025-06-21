@@ -29,7 +29,8 @@ export const MemberItem = styled.View`
   align-items: center;
   padding: 12px 16px;
   border-radius: 10px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
+  margin-top: 4px;
   background-color: ${({ theme }: { theme: ITheme }) =>
     theme.colors.card || "#fff"};
 `;
@@ -55,7 +56,7 @@ export const EmptyMessage = styled.Text`
 export const PlanningItem = styled.View`
   padding: 12px 16px;
   border-radius: 10px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   background-color: ${({ theme }: { theme: ITheme }) =>
     theme.colors.card || "#fff"};
 `;
