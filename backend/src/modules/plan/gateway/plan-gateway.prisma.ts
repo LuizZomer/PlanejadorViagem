@@ -107,4 +107,12 @@ export class PlanGateway implements PlanGatewayInterface {
       },
     });
   }
+
+  async deletePlan(planExternalId: string): Promise<Plan> {
+    return await this.prisma.plan.delete({
+      where: {
+        externalId: planExternalId,
+      },
+    });
+  }
 }

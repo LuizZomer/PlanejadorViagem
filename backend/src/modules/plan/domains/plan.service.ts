@@ -6,6 +6,7 @@ import { CreatePlanDto } from '../presentation/dto/create-plan.dto';
 import { GetPlansByUserExternalIdUseCase } from './use-case/get-plans-by-user-external-id.use-case';
 import { GetCityByExternalId } from './use-case/get-city-by-external-id.use-case';
 import { ChangePlanOrganizationUseCase } from './use-case/change-plan-organization.use-case';
+import { DeletePlanUseCase } from './use-case/delete-plan';
 
 @Injectable()
 export class PlanService {
@@ -15,6 +16,7 @@ export class PlanService {
     private readonly getPlansByUserExternalIdUseCase: GetPlansByUserExternalIdUseCase,
     private readonly getCityByExternalId: GetCityByExternalId,
     private readonly changePlanOrganizationUseCase: ChangePlanOrganizationUseCase,
+    private readonly deletePlanUseCase: DeletePlanUseCase,
   ) {}
 
   // async getAllCities() {
@@ -41,5 +43,9 @@ export class PlanService {
       organizationId,
       planExternalId,
     );
+  }
+
+  async deletePlan(planExternalId: string) {
+    return this.deletePlanUseCase.execute(planExternalId);
   }
 }

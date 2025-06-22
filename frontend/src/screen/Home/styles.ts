@@ -141,6 +141,13 @@ export const LoadingSmall = styled.Text`
   font-size: 14px;
 `;
 
+export const CardFooter = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 12px;
+`;
+
 export const EmptyText = styled.Text`
   text-align: center;
   color: #666;

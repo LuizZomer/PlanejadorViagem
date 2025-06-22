@@ -9,6 +9,7 @@ import { UserModule } from '../user/user.module';
 import { GetCityByExternalId } from './domains/use-case/get-city-by-external-id.use-case';
 import { ChangePlanOrganizationUseCase } from './domains/use-case/change-plan-organization.use-case';
 import { OrganizationModule } from '../organization/organization.module';
+import { DeletePlanUseCase } from './domains/use-case/delete-plan';
 
 @Module({
   imports: [UserModule, OrganizationModule],
@@ -22,6 +23,7 @@ import { OrganizationModule } from '../organization/organization.module';
     CreatePlanWithDaysUseCase,
     GetCityByExternalId,
     ChangePlanOrganizationUseCase,
+    DeletePlanUseCase,
   ],
   exports: [PlanService],
 })

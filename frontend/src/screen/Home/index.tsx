@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { StatusBar, Touchable, TouchableOpacity } from "react-native";
 import { authStore } from "../../shared/stores/auth/authStore";
-import { Icon } from "@rneui/themed";
+import { Icon, Text } from "@rneui/themed";
 import { InformCityTab } from "../../shared/components/Pages/Home/InformCityTab";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getPlans } from "../../services/plan/get-plans";
 import { useNavigation } from "@react-navigation/native";
 import { NavigationRoutesProp } from "../../shared/types/navigation/navigate";
@@ -11,12 +11,17 @@ import { SuggestCityTab } from "../../shared/components/Pages/Home/SuggestCityTa
 import * as S from "./styles";
 import { formatDate } from "../../shared/utils/formatDate";
 import { AssignedPlanInOrg } from "../../shared/components/Dialog/AssignedPlanInOrg";
+import { deletePlan } from "../../services/plan/delete-plan";
+import { ConfirmDeletePlan } from "../../shared/components/Dialog/ConfirmDeletePlan";
 
 export const Home = () => {
   const user = authStore((store) => store.user);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedPlanExternalId, setSelectedPlanExternalId] =
-    useState<string>("");
+  const [deletePlanOpen, setDeletePlanOpen] = useState(false);
+  const [selectedPlanExternalId, setSelectedPlanExternalId] = useState<
+    string | null
+  >(null);
+  const queryClient = useQueryClient();
 
   const [selectedOption, setSelectedOption] = React.useState<
     "inform" | "suggest"
@@ -27,6 +32,13 @@ export const Home = () => {
     queryKey: ["get-cities"],
     queryFn: async () => getPlans(),
     staleTime: 1000 * 60 * 5,
+  });
+
+  const { mutateAsync } = useMutation({
+    mutationFn: async (planExternalId: string) => deletePlan(planExternalId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["get-cities"] });
+    },
   });
 
   const handleAssignPlan = (planExternalId: string) => {
@@ -129,19 +141,38 @@ export const Home = () => {
                       Nível de gasto: {plan.spendingLevel}
                     </S.PlanInfoText>
                   </S.PlanInfo>
-                  <S.AssignButton
-                    onPress={() => handleAssignPlan(plan.externalId)}
-                  >
-                    <S.AssignButtonText>
-                      Atribuir à Organização
-                    </S.AssignButtonText>
-                  </S.AssignButton>
+                  <S.CardFooter>
+                    <S.AssignButton
+                      onPress={() => handleAssignPlan(plan.externalId)}
+                    >
+                      <S.AssignButtonText>
+                        Atribuir à Organização
+                      </S.AssignButtonText>
+                    </S.AssignButton>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setSelectedPlanExternalId(plan.externalId);
+                        setDeletePlanOpen(true);
+                      }}
+                      accessibilityLabel={`Excluir organização ${plan.description}`}
+                      accessibilityRole="button"
+                    >
+                      <Text style={{ fontSize: 25 }}>🗑️</Text>
+                    </TouchableOpacity>
+                  </S.CardFooter>
                 </S.PlanCard>
               </TouchableOpacity>
             ))}
           </S.CardsContainer>
         )}
       </S.ScrollContent>
+      {deletePlanOpen && selectedPlanExternalId && (
+        <ConfirmDeletePlan
+          isOpen={deletePlanOpen}
+          toggleDialog={() => setDeletePlanOpen(false)}
+          planExternalId={selectedPlanExternalId}
+        />
+      )}
       {isOpen && selectedPlanExternalId && (
         <AssignedPlanInOrg
           isOpen={isOpen}

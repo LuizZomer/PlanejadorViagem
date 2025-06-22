@@ -126,7 +126,7 @@ model TripDay {
   averageTemp Decimal? @map("average_temp")
 
   planId     Int               @map("plan_id")
-  plan       Plan              @relation(fields: [planId], references: [id])
+  plan       Plan              @relation(fields: [planId], references: [id], onDelete: Cascade)
   activities TouristActivity[]
 
   @@map("trip_days")

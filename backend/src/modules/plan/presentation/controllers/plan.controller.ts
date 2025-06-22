@@ -2,6 +2,7 @@ import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -97,6 +98,18 @@ export class PlanController {
       organizationExternalId,
       planExternalId,
     );
+
+    return {
+      statusCode: HttpStatus.OK,
+      content: { plan },
+    };
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  @Delete(':externalId')
+  async deletePlan(@Param('externalId') externalId: string) {
+    const plan = await this.planService.deletePlan(externalId);
 
     return {
       statusCode: HttpStatus.OK,

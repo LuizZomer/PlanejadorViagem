@@ -6,4 +6,5 @@ export class PlanGatewayInterface {
   findAllPlans: (userId: number) => Promise<Plan[]>;
   createPlan: (cityData: CreatePlanDto, userId: number) => Promise<IPlanOutput>;
   findPlanByExternalId: (planExternalId: string) => Promise<Plan>;
+  deletePlan: (planExternalId: string) => Promise<Plan>;
 }
