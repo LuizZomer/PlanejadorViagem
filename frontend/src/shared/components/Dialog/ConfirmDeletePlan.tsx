@@ -33,8 +33,8 @@ export const ConfirmDeletePlan = ({
       <Dialog.Title title="Apagar " />
       <Text>Tem certeza que deseja apagar este planejamento?</Text>
       <Dialog.Actions>
-        <Dialog.Button title="Cancelar" onPress={toggleDialog} />
         <Dialog.Button title="Apagar" onPress={handleDelete} />
+        <Dialog.Button title="Cancelar" onPress={toggleDialog} />
       </Dialog.Actions>
     </Dialog>
   );

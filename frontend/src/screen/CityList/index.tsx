@@ -11,6 +11,7 @@ import {
   IFindPlaceById,
 } from "../../services/plan/find-place-by-city";
 import Toast from "react-native-toast-message";
+import { PlanLoading } from "../../shared/components/Loading/PlanLoading";
 
 export const CityList = () => {
   const route = useRoute<RouteProp<TRootStackParamList, "CityList">>();
@@ -52,67 +53,70 @@ export const CityList = () => {
   };
 
   return (
-    <S.Container>
-      <S.Title>{cityList.description}</S.Title>
-      <S.Subtitle>Nível de gastos {cityList.spendingLevel}</S.Subtitle>
+    <>
+      {mutation.isPending && <PlanLoading />}
+      {!mutation.isPending && (
+        <S.Container>
+          <S.Title>{cityList.description}</S.Title>
+          <S.Subtitle>Nível de gastos {cityList.spendingLevel}</S.Subtitle>
 
-      {suggestedCities.map(
-        ({ country, description, name, places, latitude, longitude }) => (
-          <S.Card key={name}>
-            <S.CityName>{name}</S.CityName>
-            <S.CountryText>{country}</S.CountryText>
-            <S.DescriptionText>{description}</S.DescriptionText>
+          {suggestedCities.map(
+            ({ country, description, name, places, latitude, longitude }) => (
+              <S.Card key={name}>
+                <S.CityName>{name}</S.CityName>
+                <S.CountryText>{country}</S.CountryText>
+                <S.DescriptionText>{description}</S.DescriptionText>
 
-            {places.map(({ name, description }) => (
-              <S.PlaceCard key={name}>
-                <S.PlaceTitle>{name}</S.PlaceTitle>
-                <S.PlaceDescription>{description}</S.PlaceDescription>
-              </S.PlaceCard>
-            ))}
+                {places.map(({ name, description }) => (
+                  <S.PlaceCard key={name}>
+                    <S.PlaceTitle>{name}</S.PlaceTitle>
+                    <S.PlaceDescription>{description}</S.PlaceDescription>
+                  </S.PlaceCard>
+                ))}
 
-            <S.StyledMap
-              initialRegion={{
-                latitude: Number(latitude),
-                longitude: Number(longitude),
-                latitudeDelta: 0.1,
-                longitudeDelta: 0.1,
-              }}
-            >
-              {places.map(({ name, latitude, longitude, description }) => (
-                <Marker
-                  key={name}
-                  coordinate={{
+                <S.StyledMap
+                  initialRegion={{
                     latitude: Number(latitude),
                     longitude: Number(longitude),
+                    latitudeDelta: 0.1,
+                    longitudeDelta: 0.1,
                   }}
-                  title={name}
-                  description={description}
-                />
-              ))}
-            </S.StyledMap>
+                >
+                  {places.map(({ name, latitude, longitude, description }) => (
+                    <Marker
+                      key={name}
+                      coordinate={{
+                        latitude: Number(latitude),
+                        longitude: Number(longitude),
+                      }}
+                      title={name}
+                      description={description}
+                    />
+                  ))}
+                </S.StyledMap>
 
-            <S.Spacer />
+                <S.Spacer />
 
-            <S.SaveButton
-              onPress={() =>
-                handleSaveCity({
-                  destination: name,
-                  country,
-                  spendingLevel: formData.spendingLevel,
-                  startDate: formData.startDate,
-                  endDate: formData.endDate,
-                  hosting: formData.hosting,
-                })
-              }
-              disabled={mutation.isPending}
-            >
-              {mutation.isPending ? "Gerando..." : "Gerar planejamento"}
-            </S.SaveButton>
-          </S.Card>
-        )
+                <S.SaveButton
+                  onPress={() =>
+                    handleSaveCity({
+                      destination: name,
+                      country,
+                      spendingLevel: formData.spendingLevel,
+                      startDate: formData.startDate,
+                      endDate: formData.endDate,
+                      hosting: formData.hosting,
+                    })
+                  }
+                  disabled={mutation.isPending}
+                >
+                  {mutation.isPending ? "Gerando..." : "Gerar planejamento"}
+                </S.SaveButton>
+              </S.Card>
+            )
+          )}
+        </S.Container>
       )}
-
-      {/* <S.CancelButton onPress={handleHomeReturn}>Voltar para a home</S.CancelButton> */}
-    </S.Container>
+    </>
   );
 };

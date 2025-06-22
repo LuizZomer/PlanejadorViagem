@@ -9,6 +9,7 @@ import * as S from "./styles";
 import { ScrollView, View } from "react-native";
 import { formatDate } from "../../shared/utils/formatDate";
 import { MaterialIcons } from "@expo/vector-icons";
+import { PlanLoading } from "../../shared/components/Loading/PlanLoading";
 
 interface IActivity {
   name: string;

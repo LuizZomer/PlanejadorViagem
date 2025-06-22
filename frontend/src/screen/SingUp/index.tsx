@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Badge, Button, Input } from "@rneui/themed";
+import { Badge, Button, Icon, Input } from "@rneui/themed";
 import { useQuery } from "@tanstack/react-query";
 import { LinearGradient } from "expo-linear-gradient";
 import { useMemo, useState } from "react";
@@ -30,8 +30,14 @@ const signupSchema = z
   .object({
     username: z.string().min(1, "Nome de usuário é obrigatório"),
     email: z.string().min(1, "Campo obrigatório").email("Email inválido"),
-    password: z.string().min(6, "A senha deve ter no mínimo 6 caracteres"),
     confirmPassword: z.string(),
+    password: z
+      .string()
+      .min(6)
+      .regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/, {
+        message:
+          "A senha deve ter no mínimo 6 caracteres, um número, um caracter especial e uma letra maiuscula",
+      }),
     preferences: z.array(z.string()),
   })
   .superRefine((val, ctx) => {
@@ -122,7 +128,24 @@ export const Signup = () => {
           <TopImage source={require("../../shared/assets/topVector.png")} />
         </TopImageContainer>
 
-        <View style={{ marginBottom: 20 }}>
+        <View
+          style={{
+            marginBottom: 20,
+            flexDirection: "row",
+            alignItems: "center",
+            paddingHorizontal: 65,
+          }}
+        >
+          <Icon
+            name="arrow-back"
+            type="material"
+            color="#111"
+            size={28}
+            onPress={() => navigation.goBack()}
+            accessibilityLabel="Voltar"
+            accessibilityRole="button"
+          />
+
           <SignInText>Registre-se</SignInText>
         </View>
 
@@ -196,7 +219,6 @@ export const Signup = () => {
                 />
               )}
             />
-
           </PreferencesFormContainer>
 
           <Controller

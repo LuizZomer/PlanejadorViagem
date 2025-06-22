@@ -13,6 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NavigationRoutesProp } from "../../shared/types/navigation/navigate";
 import { Button } from "@rneui/themed";
 import { AddOrganizationMembers } from "../../shared/components/Dialog/AddOrganizationMembers";
+import { PlanLoading } from "../../shared/components/Loading/PlanLoading";
 
 export const OrganizationDetailsScreen = () => {
   const navigate = useNavigation<NavigationRoutesProp>();

@@ -90,11 +90,8 @@ export const AddOrganizationMembers = ({
     });
   };
 
-  console.log("members", members);
-
   useEffect(() => {
     setMembers(alreadyMembers);
-    console.log("members", members);
   }, [alreadyMembers]);
 
   return (
