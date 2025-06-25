@@ -24,6 +24,8 @@ interface IDay {
   date: string;
   expense: string;
   activities: IActivity[];
+  weather: string;
+  averageTemp: number;
 }
 
 interface IPlaceListData {
@@ -114,6 +116,16 @@ export const PlacesList = () => {
             <S.PlaceTitle style={{ color: "#00BFFF", marginBottom: 8 }}>
               Dia {idx + 1} - {formatDate(day.date)}
             </S.PlaceTitle>
+            {day.averageTemp && (
+              <S.PlaceDescription style={{ marginBottom: 12 }}>
+                Média de temperatura: {day.averageTemp}°C
+              </S.PlaceDescription>
+            )}
+            {day.weather && (
+              <S.PlaceDescription style={{ marginBottom: 12 }}>
+                Clima: {day.weather}
+              </S.PlaceDescription>
+            )}
             <S.PlaceDescription style={{ marginBottom: 12 }}>
               Gasto estimado: R$ {day.expense}
             </S.PlaceDescription>
